@@ -1,3 +1,68 @@
+/**
+ * SVG-Galerie für Chatbot-Icons
+ *
+ * Dieses Skript generiert SVG-Grafiken für Chatbots basierend auf Markdown-Dateien.
+ * Jede Grafik zeigt ein Icon in einem anpassbaren Rahmen.
+ */
+
+// Standardwerte für SVG-Attribute
+let svgConfig = {
+    bgColor: "#000000",
+    borderColor: "#ffffff",
+    iconColor: "#ffffff",
+    shape: "octagon", // octagon, circle, square, hexagon
+    iconSize: 40,
+    iconX: 30,
+    iconY: 30
+};
+
+// Kategorien für Chatbots
+const categories = {
+    "Kochen-Assistent": "food",
+    "Fitness-Trainer": "health",
+    "Reiseplaner": "travel",
+    "Finanzberater": "finance",
+    "Wettervorhersage": "utility",
+    "Einkaufen": "shopping",
+    "Lernen": "education",
+    "Gesundheit": "health",
+    "Musik": "entertainment",
+    "Film": "entertainment",
+    "Büro": "productivity",
+    "Soziale Medien": "social",
+    "Technologie": "technology",
+    "Garten": "home",
+    "Haustier": "pets",
+    "Auto": "transport",
+    "Flug": "travel",
+    "Schiff": "travel",
+    "Zug": "travel",
+    "Fahrrad": "transport",
+    "Übersetzungs-Assistent": "language",
+    "Programmier-Tutor": "education",
+    "Meditations-Guide": "health",
+    "Ernährungsberater": "health",
+    "Spiele-Begleiter": "entertainment",
+    "Nachrichten-Aggregator": "news",
+    "Produktivitäts-Coach": "productivity",
+    "Sprach-Lehrer": "education",
+    "Kreativ-Berater": "creativity",
+    "Wissenschafts-Erklärer": "education",
+    "Geschichten-Erzähler": "entertainment",
+    "Psychologie-Berater": "health",
+    "Kunst-Kritiker": "art",
+    "Mathematik-Tutor": "education",
+    "Astronomie-Guide": "science",
+    "Geschichts-Experte": "education",
+    "Mode-Berater": "fashion",
+    "Handwerks-Helfer": "diy",
+    "Eltern-Ratgeber": "family",
+    "Umwelt-Berater": "environment"
+};
+
+// Favoriten im localStorage speichern
+let favorites = JSON.parse(localStorage.getItem('chatbotFavorites')) || [];
+
 // SVG-Icons für verschiedene Chatbot-Typen
 const icons = {
     // Ursprüngliche Icons
@@ -45,72 +110,106 @@ const icons = {
     "Blatt": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>'
 };
 
-// Farben für die Chatbots
-const colors = {
-    "Rot": "#e74c3c",
-    "Grün": "#2ecc71",
-    "Blau": "#3498db",
-    "Gelb": "#f1c40f",
-    "Grau": "#95a5a6",
-    "Rosa": "#e84393",
-    "Lila": "#9b59b6",
-    "Schwarz": "#2c3e50",
-    "Silber": "#bdc3c7",
-    "Braun": "#8B4513"
-};
-
-// Formen und ihre Rundungsradien
-const shapes = {
-    "Hexagon": "0",
-    "Kreis": "50",
-    "Viereck": "5",
-    "Fünfeck": "15",
-    "Sechseck": "20",
-    "Achteck": "25",
-    "Dreieck": "0"
-};
-
-// Funktion zum Erstellen einer SVG basierend auf den Parametern
+/**
+ * Erstellt eine SVG-Grafik basierend auf den übergebenen Parametern und aktuellen Einstellungen.
+ *
+ * @param {string} name - Der Name des Chatbots
+ * @param {string} icon - Der Name des Icons
+ * @param {string} shape - Die ursprüngliche Form (wird durch die aktuelle Einstellung überschrieben)
+ * @param {string} color - Die ursprüngliche Farbe (wird durch die aktuelle Einstellung überschrieben)
+ * @returns {string} HTML-Code für die Galerie-Item mit SVG und Einbindungscode
+ */
 function createSVG(name, icon, shape, color) {
-    // Immer schwarzer Hintergrund
-    const backgroundColor = "#000000";
+    // Icon aus der Icons-Map holen oder leeren String verwenden
+    let iconSvg = icons[icon] || "";
     
-    // Immer 8-Eck-Form (Oktagon) mit Rundungsradius 25
-    const borderRadius = "25";
+    // Icon-Farbe anpassen, wenn nicht weiß
+    if (svgConfig.iconColor !== "#ffffff") {
+        iconSvg = iconSvg.replace(/fill="white"/g, `fill="${svgConfig.iconColor}"`);
+    }
     
-    const iconSvg = icons[icon] || "";
+    // Form-Parameter basierend auf der ausgewählten Form
+    let rx = "25"; // Standard für Achteck
+    if (svgConfig.shape === "circle") {
+        rx = "50";
+    } else if (svgConfig.shape === "square") {
+        rx = "10";
+    } else if (svgConfig.shape === "hexagon") {
+        rx = "30";
+    }
     
-    // SVG-Code für die Einbindung
-    const svgCode = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-        <!-- Hintergrund (8-Eck) -->
-        <rect width="100" height="100" fill="${backgroundColor}" rx="${borderRadius}"/>
-        
-        <!-- Weißer Rand -->
-        <rect width="96" height="96" x="2" y="2" fill="none" stroke="#ffffff" stroke-width="2" rx="${borderRadius}"/>
-        
-        <!-- Icon Bereich (zentriert) -->
-        <g transform="translate(30,30)">
-            ${iconSvg}
-        </g>
-    </svg>`;
+    // SVG-Code erstellen
+    const svgCode = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+    <!-- Hintergrund -->
+    <rect width="100" height="100" fill="${svgConfig.bgColor}" rx="${rx}" />
     
-    // Einbindungscode
-    const embedCode = `<img src="data:image/svg+xml;base64,${btoa(svgCode)}" alt="${name}" width="100" height="100">`;
+    <!-- Rand -->
+    <rect width="96" height="96" x="2" y="2" fill="none" stroke="${svgConfig.borderColor}" stroke-width="2" rx="${rx}" />
     
+    <!-- Icon Bereich (zentriert) -->
+    <g transform="translate(${svgConfig.iconX},${svgConfig.iconY})">
+        ${iconSvg}
+    </g>
+</svg>`;
+
+    // Verschiedene Einbindungscodes erstellen
+    const htmlEmbedCode = `<img src="data:image/svg+xml;base64,${btoa(svgCode)}" alt="${name}" width="100" height="100">`;
+    const markdownEmbedCode = `![${name}](data:image/svg+xml;base64,${btoa(svgCode)})`;
+    const urlEmbedCode = `data:image/svg+xml;base64,${btoa(svgCode)}`;
+    
+    // Kategorie des Chatbots ermitteln
+    const category = categories[name] || "other";
+    
+    // Prüfen, ob der Chatbot ein Favorit ist
+    const isFavorite = favorites.includes(name);
+    
+    // HTML für das Galerie-Item zurückgeben
     return `
-    <div class="gallery-item">
-        ${svgCode}
-        <h3 style="color: #ffffff">${name}</h3>
-        <div class="embed-code">
-            <h4>Einbindungscode:</h4>
-            <textarea readonly>${embedCode}</textarea>
-            <button onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">Kopieren</button>
+<div class="gallery-item" data-name="${name}" data-category="${category}">
+    ${svgCode}
+    <h3>${name}</h3>
+    
+    <div class="gallery-item-actions">
+        <button class="action-btn download" title="SVG herunterladen" onclick="downloadSVG('${name}', this.parentNode.parentNode)">
+            <i class="fas fa-download"></i>
+        </button>
+        
+        <button class="action-btn favorite ${isFavorite ? 'active' : ''}" title="Als Favorit markieren" onclick="toggleFavorite('${name}', this)">
+            <i class="fas fa-star"></i>
+        </button>
+        
+        <div class="tooltip">
+            <button class="action-btn info" title="Info">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <span class="tooltiptext">Kategorie: ${category}</span>
         </div>
     </div>
-    `;
+    
+    <div class="embed-code">
+        <h4>Einbindungscode:</h4>
+        <div class="embed-tabs">
+            <button class="tab-btn active" data-format="html" onclick="switchEmbedFormat('html', this.parentNode.parentNode)">HTML</button>
+            <button class="tab-btn" data-format="markdown" onclick="switchEmbedFormat('markdown', this.parentNode.parentNode)">Markdown</button>
+            <button class="tab-btn" data-format="url" onclick="switchEmbedFormat('url', this.parentNode.parentNode)">URL</button>
+        </div>
+        <textarea readonly data-html="${htmlEmbedCode}" data-markdown="${markdownEmbedCode}" data-url="${urlEmbedCode}">${htmlEmbedCode}</textarea>
+        <div class="preview">
+            <h4>Vorschau:</h4>
+            <div id="embed-preview">${htmlEmbedCode}</div>
+        </div>
+        <button class="btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.previousElementSibling.value)">Kopieren</button>
+    </div>
+</div>`;
 }
 
-// Funktion zum Parsen der Markdown-Datei
+/**
+ * Parst eine Markdown-Datei und extrahiert die Chatbot-Informationen.
+ * 
+ * @param {string} text - Der Inhalt der Markdown-Datei
+ * @returns {Array} Ein Array von Chatbot-Objekten
+ */
 function parseChatbotMarkdown(text) {
     const lines = text.split('\n');
     const chatbots = [];
@@ -130,7 +229,7 @@ function parseChatbotMarkdown(text) {
             // Neuen Chatbot starten
             const name = line.match(/^\d+\.\s\*\*(.+)\*\*$/)[1];
             currentBot = { name };
-        }
+        } 
         // Icon-Zeile
         else if (/^\s*-\s*Icon:\s*(.+)$/.test(line)) {
             currentBot.icon = line.match(/^\s*-\s*Icon:\s*(.+)$/)[1];
@@ -155,15 +254,184 @@ function parseChatbotMarkdown(text) {
     return chatbots;
 }
 
-// Funktion zum Laden und Anzeigen aller Chatbots
+/**
+ * Wechselt das Einbindungsformat (HTML, Markdown, URL)
+ *
+ * @param {string} format - Das Format ('html', 'markdown', 'url')
+ * @param {HTMLElement} container - Der Container mit den Tabs und dem Textarea
+ */
+function switchEmbedFormat(format, container) {
+    const textarea = container.querySelector('textarea');
+    const tabs = container.querySelectorAll('.tab-btn');
+    const preview = container.querySelector('#embed-preview');
+    
+    // Aktiven Tab setzen
+    tabs.forEach(tab => {
+        if (tab.dataset.format === format) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Textarea-Inhalt aktualisieren
+    textarea.value = textarea.dataset[format];
+    
+    // Vorschau aktualisieren (nur für HTML)
+    if (format === 'html') {
+        preview.innerHTML = textarea.dataset.html;
+    } else {
+        preview.textContent = textarea.dataset[format];
+    }
+}
+
+/**
+ * Lädt ein SVG als Datei herunter
+ *
+ * @param {string} name - Der Name des Chatbots
+ * @param {HTMLElement} container - Der Container mit dem SVG
+ */
+function downloadSVG(name, container) {
+    const svgElement = container.querySelector('svg');
+    const svgData = new XMLSerializer().serializeToString(svgElement);
+    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chatbot-${name.toLowerCase().replace(/\s+/g, '-')}.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * Fügt einen Chatbot zu den Favoriten hinzu oder entfernt ihn
+ *
+ * @param {string} name - Der Name des Chatbots
+ * @param {HTMLElement} button - Der Favoriten-Button
+ */
+function toggleFavorite(name, button) {
+    const index = favorites.indexOf(name);
+    
+    if (index === -1) {
+        // Zu Favoriten hinzufügen
+        favorites.push(name);
+        button.classList.add('active');
+    } else {
+        // Aus Favoriten entfernen
+        favorites.splice(index, 1);
+        button.classList.remove('active');
+    }
+    
+    // Im localStorage speichern
+    localStorage.setItem('chatbotFavorites', JSON.stringify(favorites));
+    
+    // Wenn der Favoriten-Filter aktiv ist, die Galerie aktualisieren
+    const activeFilter = document.querySelector('.filter-buttons .btn.active');
+    if (activeFilter && activeFilter.dataset.category === 'favorites') {
+        filterGallery('favorites');
+    }
+}
+
+/**
+ * Filtert die Galerie nach Kategorie
+ *
+ * @param {string} category - Die Kategorie oder 'all' für alle oder 'favorites' für Favoriten
+ */
+function filterGallery(category) {
+    const items = document.querySelectorAll('.gallery-item');
+    const buttons = document.querySelectorAll('.filter-buttons .btn');
+    
+    // Aktiven Button setzen
+    buttons.forEach(btn => {
+        if (btn.dataset.category === category) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Items filtern
+    items.forEach(item => {
+        if (category === 'all') {
+            item.style.display = '';
+        } else if (category === 'favorites') {
+            const name = item.dataset.name;
+            item.style.display = favorites.includes(name) ? '' : 'none';
+        } else {
+            const itemCategory = item.dataset.category;
+            item.style.display = itemCategory === category ? '' : 'none';
+        }
+    });
+}
+
+/**
+ * Sucht nach Chatbots basierend auf dem Suchbegriff
+ *
+ * @param {string} query - Der Suchbegriff
+ */
+function searchGallery(query) {
+    const items = document.querySelectorAll('.gallery-item');
+    const normalizedQuery = query.toLowerCase().trim();
+    
+    items.forEach(item => {
+        const name = item.dataset.name.toLowerCase();
+        const category = item.dataset.category.toLowerCase();
+        
+        if (normalizedQuery === '') {
+            item.style.display = '';
+        } else {
+            const match = name.includes(normalizedQuery) || category.includes(normalizedQuery);
+            item.style.display = match ? '' : 'none';
+        }
+    });
+    
+    // Wenn eine Suche aktiv ist, den aktiven Filter zurücksetzen
+    if (normalizedQuery !== '') {
+        const buttons = document.querySelectorAll('.filter-buttons .btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        buttons[0].classList.add('active'); // "Alle" Button aktivieren
+    }
+}
+
+/**
+ * Aktualisiert die SVG-Konfiguration und alle angezeigten SVGs
+ *
+ * @param {Object} newConfig - Die neue Konfiguration
+ */
+function updateSVGConfig(newConfig) {
+    // Konfiguration aktualisieren
+    Object.assign(svgConfig, newConfig);
+    
+    // Alle Chatbots neu laden
+    loadAllChatbots();
+}
+
+/**
+ * Lädt alle Chatbots aus den Markdown-Dateien und zeigt sie in der Galerie an.
+ */
 function loadAllChatbots() {
     const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; // Galerie leeren
+    
+    // Galerie leeren
+    gallery.innerHTML = '<div class="loading">SVGs werden geladen</div>';
     
     // Beide Markdown-Dateien laden
     Promise.all([
-        fetch('chatbot-ideen.md').then(response => response.text()),
-        fetch('chatbot-ideen-erweitert.md').then(response => response.text())
+        fetch('chatbot-ideen.md').then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        }),
+        fetch('chatbot-ideen-erweitert.md').then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
     ])
     .then(([text1, text2]) => {
         // Beide Dateien parsen
@@ -173,17 +441,165 @@ function loadAllChatbots() {
         // Alle Chatbots kombinieren
         const allChatbots = [...chatbots1, ...chatbots2];
         
+        // Galerie leeren
+        gallery.innerHTML = '';
+        
         // Alle Chatbots zur Galerie hinzufügen
         allChatbots.forEach(bot => {
             const svg = createSVG(bot.name, bot.icon, bot.shape, bot.color);
             gallery.innerHTML += svg;
         });
+        
+        // Aktiven Filter anwenden, falls vorhanden
+        const activeFilter = document.querySelector('.filter-buttons .btn.active');
+        if (activeFilter) {
+            filterGallery(activeFilter.dataset.category);
+        }
+        
+        // Aktive Suche anwenden, falls vorhanden
+        const searchInput = document.getElementById('search');
+        if (searchInput.value.trim() !== '') {
+            searchGallery(searchInput.value);
+        }
     })
     .catch(error => {
         console.error('Fehler beim Laden der Chatbot-Ideen:', error);
-        gallery.innerHTML = `<div class="error">Fehler beim Laden der Chatbot-Ideen: ${error.message}</div>`;
+        gallery.innerHTML = `
+            <div class="error">
+                <h2>Fehler beim Laden der Chatbot-Ideen</h2>
+                <p>${error.message}</p>
+                <p>Bitte überprüfen Sie, ob die Markdown-Dateien vorhanden sind.</p>
+            </div>
+        `;
     });
 }
 
-// Chatbots laden, wenn die Seite geladen ist
-document.addEventListener('DOMContentLoaded', loadAllChatbots);
+/**
+ * Initialisiert die Benutzeroberfläche und Event-Listener
+ */
+function initUI() {
+    // Suchfeld
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', () => {
+        searchGallery(searchInput.value);
+    });
+    
+    // Filter-Buttons
+    const filterButtons = document.querySelectorAll('.filter-buttons .btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterGallery(button.dataset.category);
+        });
+    });
+    
+    // Ansichts-Umschalter (Raster/Liste)
+    const gridViewBtn = document.getElementById('grid-view');
+    const listViewBtn = document.getElementById('list-view');
+    const gallery = document.getElementById('gallery');
+    
+    gridViewBtn.addEventListener('click', () => {
+        gallery.classList.remove('list-view');
+        gridViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+    });
+    
+    listViewBtn.addEventListener('click', () => {
+        gallery.classList.add('list-view');
+        listViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+    });
+    
+    // Größen-Schieberegler
+    const sizeControl = document.getElementById('size-control');
+    sizeControl.addEventListener('input', () => {
+        const size = sizeControl.value;
+        document.documentElement.style.setProperty('--icon-size', `${size}px`);
+        
+        // SVG-Größe in der Konfiguration aktualisieren
+        svgConfig.iconSize = size * 0.4; // 40% der Anzeigegröße
+        svgConfig.iconX = size * 0.3;    // 30% der Anzeigegröße
+        svgConfig.iconY = size * 0.3;    // 30% der Anzeigegröße
+    });
+    
+    // Theme-Umschalter (Hell/Dunkel)
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        
+        // Icon aktualisieren
+        const icon = themeToggle.querySelector('i');
+        if (document.body.classList.contains('light-mode')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+        
+        // Theme-Präferenz speichern
+        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    });
+    
+    // Gespeichertes Theme anwenden
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        const icon = themeToggle.querySelector('i');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    }
+    
+    // Anpassungs-Panel
+    const customizeToggle = document.getElementById('customize-toggle');
+    const customizer = document.querySelector('.customizer');
+    
+    customizeToggle.addEventListener('click', () => {
+        customizer.classList.toggle('active');
+        customizeToggle.classList.toggle('active');
+    });
+    
+    // Anpassungs-Steuerelemente
+    const bgColorInput = document.getElementById('bg-color');
+    const borderColorInput = document.getElementById('border-color');
+    const shapeSelect = document.getElementById('shape');
+    const iconColorInput = document.getElementById('icon-color');
+    
+    bgColorInput.value = svgConfig.bgColor;
+    borderColorInput.value = svgConfig.borderColor;
+    shapeSelect.value = svgConfig.shape;
+    iconColorInput.value = svgConfig.iconColor;
+    
+    bgColorInput.addEventListener('input', () => {
+        updateSVGConfig({ bgColor: bgColorInput.value });
+    });
+    
+    borderColorInput.addEventListener('input', () => {
+        updateSVGConfig({ borderColor: borderColorInput.value });
+    });
+    
+    shapeSelect.addEventListener('change', () => {
+        updateSVGConfig({ shape: shapeSelect.value });
+    });
+    
+    iconColorInput.addEventListener('input', () => {
+        updateSVGConfig({ iconColor: iconColorInput.value });
+    });
+}
+
+// Chatbots laden und UI initialisieren, wenn die Seite geladen ist
+document.addEventListener('DOMContentLoaded', () => {
+    loadAllChatbots();
+    initUI();
+    
+    // Favoriten-Button zur Filterleiste hinzufügen
+    const filterButtons = document.querySelector('.filter-buttons');
+    const favoritesButton = document.createElement('button');
+    favoritesButton.className = 'btn';
+    favoritesButton.dataset.category = 'favorites';
+    favoritesButton.innerHTML = '<i class="fas fa-star"></i> Favoriten';
+    filterButtons.appendChild(favoritesButton);
+    
+    favoritesButton.addEventListener('click', () => {
+        filterGallery('favorites');
+    });
+});
