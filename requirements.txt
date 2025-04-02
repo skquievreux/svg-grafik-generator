@@ -1,0 +1,16 @@
+C:\CODE\GIT\SVG-Grafik
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\supabase-js
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\auth-js
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\functions-js
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\node-fetch
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\postgrest-js
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\realtime-js
+C:\CODE\GIT\SVG-Grafik\node_modules\@supabase\storage-js
+C:\CODE\GIT\SVG-Grafik\node_modules\whatwg-url
+C:\CODE\GIT\SVG-Grafik\node_modules\@types\phoenix
+C:\CODE\GIT\SVG-Grafik\node_modules\@types\ws
+C:\CODE\GIT\SVG-Grafik\node_modules\ws
+C:\CODE\GIT\SVG-Grafik\node_modules\tr46
+C:\CODE\GIT\SVG-Grafik\node_modules\webidl-conversions
+C:\CODE\GIT\SVG-Grafik\node_modules\@types\node
+C:\CODE\GIT\SVG-Grafik\node_modules\undici-types
