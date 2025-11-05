@@ -53,7 +53,7 @@ export function DynamicIcon({
     return (
       <div
         className={cn('flex items-center justify-center bg-red-100 text-red-600 rounded', className)}
-        style={{ width: size, height: size }}
+        style={{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }}
       >
         <span className="text-xs">!</span>
       </div>
@@ -64,15 +64,15 @@ export function DynamicIcon({
     return (
       <div
         className={cn('animate-pulse bg-gray-200 rounded', className)}
-        style={{ width: size, height: size }}
+        style={{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }}
       />
     );
   }
 
   return (
     <div
-      className={cn('icon-container', className)}
-      style={{ width: size, height: size }}
+      className={cn('flex items-center justify-center', className)}
+      style={{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }}
       dangerouslySetInnerHTML={{ __html: svgContent }}
     />
   );
