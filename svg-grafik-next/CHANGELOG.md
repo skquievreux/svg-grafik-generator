@@ -1,105 +1,138 @@
 # Changelog
 
-Alle wichtigen Änderungen an der SVG-Grafik Next.js Applikation werden in diesem Dokument dokumentiert.
+Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
+und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-11-05
+## [1.1.0] - 2025-11-05
 
-### 🎉 Added - Neue Features
+### 🎉 Added (Hinzugefügt)
 
-- **Erstmalige Veröffentlichung** der SVG-Grafik-Galerie
-- **40+ professionelle SVG-Icons** für Chatbots
-- **Intelligente Suchfunktion** mit Filtermöglichkeiten
-- **Responsive Design** - funktioniert auf allen Geräten
-- **Barrierefreiheit** - WCAG-konforme Implementierung
-- **Dynamische SVG-Generierung** zur Laufzeit
-- **Download-Funktionalität** für alle Icons
-- **Kategorien-Filter** für bessere Navigation
-- **Favoriten-System** für häufig verwendete Icons
+#### Architektur & Code-Qualität
+- **Custom Hooks** für bessere Code-Organisation:
+  - `useLocalStorage` - Typsichere localStorage-Verwaltung
+  - `useFavorites` - Zentrale Favoriten-Logik
+  - `useIconSearch` - Optimierte Such- und Filterlogik
+  - `usePagination` - Wiederverwendbare Pagination-Logik
+  - `useGalleryData` - Strukturiertes Data-Fetching
 
-### 🔧 Changed - Änderungen
+#### Komponenten-Architektur
+- **Feature-Sliced Design** Implementierung:
+  - `GalleryHeader` - Suchleiste, Filter und Ansichtsmodus
+  - `GalleryPagination` - Wiederverwendbare Pagination-Komponente
+  - `GalleryEmptyState` - Benutzerfreundlicher Empty-State
+  - `GalleryLoading` - Konsistenter Loading-State
+  - `IconCard` - Modulare Icon-Card-Komponente
+  - `IconCardActions` - Ausgelagerte Action-Buttons
 
-- **Next.js Upgrade**: Von Version 14 auf 15 aktualisiert
-- **TypeScript**: Vollständige Typisierung implementiert
-- **Tailwind CSS**: Moderne Styling-Lösung eingeführt
-- **Build-System**: Optimierte Build-Konfiguration
+#### Testing & Quality Assurance
+- **Vitest** Testing-Setup mit React Testing Library
+- Beispiel-Tests für Custom Hooks
+- Test Coverage Konfiguration
+- Test UI für interaktives Testing (\`npm run test:ui\`)
 
-### 🛠️ Technical - Technische Verbesserungen
+#### API & Validierung
+- **Zod Schema Validierung** für API-Endpoints
+- Typsichere Request-Parameter-Validierung
+- Strukturierte Fehlerbehandlung mit Details
 
-- **App Router**: Vollständige Migration zu Next.js App Router
-- **API Routes**: RESTful API für Icon-Daten implementiert
-- **Component Architecture**: Modulare Komponenten-Struktur
-- **Performance**: Optimierte Ladezeiten und Rendering
-- **SEO**: Meta-Tags und strukturierte Daten hinzugefügt
+#### Developer Experience
+- **Prettier** Konfiguration mit Tailwind CSS Plugin
+- Erweiterte **TypeScript Strict Checks**:
+  - \`noUncheckedIndexedAccess\`
+  - \`noImplicitOverride\`
+  - \`noFallthroughCasesInSwitch\`
+  - \`noUnusedLocals\` und \`noUnusedParameters\`
+- Neue NPM Scripts:
+  - \`npm run format\` - Code formatieren
+  - \`npm run format:check\` - Format-Check
+  - \`npm run test\` - Tests ausführen
+  - \`npm run test:ui\` - Test UI öffnen
+  - \`npm run test:coverage\` - Coverage Report
 
-### 📚 Documentation - Dokumentation
+#### Accessibility
+- **Screen-Reader-Only** CSS Utility (\`.sr-only\`)
+- Verbesserte ARIA-Labels für alle interaktiven Elemente
+- \`aria-pressed\` States für Toggle-Buttons
+- \`aria-live\` Regionen für dynamische Inhalte
+- Semantische HTML-Struktur mit \`<article>\`, \`role="group"\`, etc.
 
-- **Professionelle README.md** mit vollständiger Anleitung
-- **API-Dokumentation** für alle Endpunkte
-- **Entwicklungs-Setup** beschrieben
-- **Deployment-Anleitungen** für verschiedene Plattformen
+#### Konfiguration
+- Zentrale **Config-Datei** (\`lib/config.ts\`)
+- Environment-basierte Konfiguration
+- Feature-Flags für einfaches An-/Ausschalten von Features
 
-### 🚀 Deployment
+#### Error Handling
+- **Error Boundary** Component für React Errors
+- Next.js 15 \`error.tsx\` für globales Error Handling
+- Strukturierte Fehleranzeige mit Details
 
-- **Vercel Integration**: Automatische Deployments
-- **Production Ready**: Vollständig produktionsreif
-- **Environment Management**: Versionsbasierte Konfiguration
+### 🔧 Changed (Geändert)
+
+- **Refactored** \`IconGallery\` von 400+ Zeilen auf ~150 Zeilen
+- **Verbesserte** TypeScript-Konfiguration mit strengeren Checks
+- **Optimierte** Code-Organisation durch Feature-Slicing
+- **Aktualisiert** \`globals.css\` mit Accessibility-Utilities
+
+### 📚 Dependencies
+
+#### Neue Dependencies
+- \`zod\` ^3.22.4 - Schema-Validierung
+
+#### Neue Dev Dependencies
+- \`@testing-library/jest-dom\` ^6.1.5
+- \`@testing-library/react\` ^14.1.2
+- \`@testing-library/user-event\` ^14.5.1
+- \`@vitejs/plugin-react\` ^4.2.1
+- \`@vitest/ui\` ^1.0.4
+- \`jsdom\` ^23.0.1
+- \`prettier\` ^3.1.1
+- \`prettier-plugin-tailwindcss\` ^0.5.9
+- \`vitest\` ^1.0.4
+
+### 📖 Documentation
+
+- Erweiterte README mit neuen Features
+- CHANGELOG hinzugefügt
+- Inline-Dokumentation in allen Custom Hooks
+- JSDoc-Kommentare für öffentliche APIs
+
+### 🏗️ Technical Improvements
+
+- **Bessere Testbarkeit** durch Komponenten-Aufteilung
+- **Reduzierte Komplexität** durch Custom Hooks
+- **Type-Safety** durch Zod-Validierung
+- **Wartbarkeit** durch kleinere, fokussierte Komponenten
+- **Performance** durch useMemo in Custom Hooks
 
 ---
 
-## Version History
+## [1.0.0] - 2025-11-04
 
-### Version Numbering
+### 🎉 Initial Release
 
-Dieses Projekt verwendet [Semantic Versioning](https://semver.org/):
-
-- **MAJOR.MINOR.PATCH** (z.B. 1.0.0)
-- **MAJOR**: Breaking Changes
-- **MINOR**: Neue Features (backward compatible)
-- **PATCH**: Bug Fixes (backward compatible)
-
-### Types of Changes
-
-- **Added**: Neue Features
-- **Changed**: Änderungen an bestehenden Features
-- **Deprecated**: Bald entfernte Features
-- **Removed**: Entfernte Features
-- **Fixed**: Bug Fixes
-- **Security**: Sicherheitsrelevante Änderungen
+- Next.js 15 Setup mit App Router
+- TypeScript Konfiguration
+- SVG Icon Generator mit 40+ Icons
+- Dynamische Icon-Galerie mit Suche und Filter
+- Responsive Design (Mobile, Tablet, Desktop)
+- Favoriten-System mit localStorage
+- Download und Copy-to-Clipboard Funktionen
+- Pagination (24 Icons pro Seite)
+- Grid/List View Toggle
+- 16 Kategorien
+- Tailwind CSS Styling
+- Lucide React Icons
+- Supabase Integration (vorbereitet)
 
 ---
 
-## Contributing to Changelog
+## Legende
 
-Bei Beiträgen zu diesem Projekt bitte die folgenden Richtlinien beachten:
-
-1. **Pull Requests** sollten Änderungen am Changelog enthalten
-2. **Neue Features** in der nächsten Version dokumentieren
-3. **Breaking Changes** als Major-Version markieren
-4. **Bug Fixes** als Patch-Version dokumentieren
-
-### Changelog Format
-
-```markdown
-## [Version] - YYYY-MM-DD
-
-### Added
-- Neue Features
-
-### Changed
-- Änderungen
-
-### Fixed
-- Bug Fixes
-```
-
----
-
-## Links
-
-- [GitHub Repository](https://github.com/your-repo/svg-grafik-next)
-- [Live Demo](https://svg-grafik-next-jgd0qv4p9-skquievreuxs-projects.vercel.app)
-- [Issues](https://github.com/your-repo/svg-grafik-next/issues)
-- [Discussions](https://github.com/your-repo/svg-grafik-next/discussions)
+- 🎉 **Added** - Neue Features
+- 🔧 **Changed** - Änderungen an bestehenden Features
+- 🐛 **Fixed** - Bug Fixes
+- 🗑️ **Removed** - Entfernte Features
+- 🔒 **Security** - Sicherheits-Fixes
+- 📚 **Dependencies** - Dependency Updates

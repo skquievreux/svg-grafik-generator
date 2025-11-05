@@ -1,6 +1,6 @@
 # SVG-Grafik Next.js
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-repo/svg-grafik-next)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/your-repo/svg-grafik-next)
 [![Next.js](https://img.shields.io/badge/Next.js-15.0.0-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-blue.svg)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0.0-38B2AC.svg)](https://tailwindcss.com/)
@@ -12,11 +12,15 @@ Eine interaktive SVG-Grafik-Galerie für Chatbot-Icons mit dynamischer Generieru
 - 🎨 **40+ professionelle SVG-Icons** für Chatbots
 - 🔍 **Intelligente Suche** und Filterfunktionen
 - 📱 **Responsive Design** - funktioniert auf allen Geräten
-- ♿ **Barrierefrei** - WCAG-konform
+- ♿ **Barrierefrei** - WCAG-konform mit ARIA-Labels
 - ⚡ **Blitzschnell** - optimiert mit Next.js 15
-- 🎯 **TypeScript** - vollständige Typisierung
+- 🎯 **TypeScript** - vollständige Typisierung mit strict mode
 - 🎨 **Tailwind CSS** - moderne Styling-Lösung
 - 🔄 **Dynamische Generierung** - SVG-Icons werden zur Laufzeit erstellt
+- 🧪 **Testing** - Vitest Setup mit React Testing Library
+- 🛡️ **Validierung** - Zod Schema Validierung für APIs
+- 🎨 **Code Quality** - Prettier & ESLint Konfiguration
+- 🪝 **Custom Hooks** - Wiederverwendbare React Hooks
 
 ## 🚀 Live Demo
 
@@ -25,9 +29,12 @@ Eine interaktive SVG-Grafik-Galerie für Chatbot-Icons mit dynamischer Generieru
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 15.0.0 (App Router)
-- **Sprache**: TypeScript 5.0.0
+- **Sprache**: TypeScript 5.0.0 (Strict Mode)
 - **Styling**: Tailwind CSS 3.0.0
 - **Icons**: Lucide React
+- **Validierung**: Zod 3.22.4
+- **Testing**: Vitest + React Testing Library
+- **Formatierung**: Prettier + Tailwind Plugin
 - **Deployment**: Vercel
 - **Datenbank**: Supabase (optional)
 
@@ -80,19 +87,32 @@ GET /api/gallery
 ```
 svg-grafik-next/
 ├── app/                    # Next.js App Router
-│   ├── api/               # API-Routen
-│   ├── gallery/           # Galerie-Seite
-│   ├── globals.css        # Globale Styles
+│   ├── api/               # API-Routen mit Zod Validierung
+│   ├── globals.css        # Globale Styles + Utilities
 │   ├── layout.tsx         # Root-Layout
-│   └── page.tsx           # Startseite
+│   ├── page.tsx           # Startseite
+│   └── error.tsx          # Error Boundary
 ├── components/            # React-Komponenten
-│   ├── gallery/           # Galerie-Komponenten
-│   └── ui/                # UI-Komponenten
-├── lib/                   # Hilfsfunktionen
+│   ├── gallery/           # Galerie-Komponenten (Feature-Sliced)
+│   ├── icon-card/         # Icon-Card-Komponenten
+│   ├── ui/                # UI-Komponenten
+│   └── error-boundary.tsx # React Error Boundary
+├── hooks/                 # Custom React Hooks
+│   ├── use-favorites.ts
+│   ├── use-gallery-data.ts
+│   ├── use-icon-search.ts
+│   ├── use-local-storage.ts
+│   └── use-pagination.ts
+├── lib/                   # Hilfsfunktionen & Config
+│   ├── api/              # API Schemas & Validierung
 │   ├── icons/            # Icon-Generator
+│   ├── config.ts         # App-Konfiguration
 │   ├── utils.ts          # Utility-Funktionen
 │   └── version.ts        # Versionsinformationen
 ├── types/                 # TypeScript-Typen
+├── test/                  # Tests
+│   ├── hooks/            # Hook-Tests
+│   └── setup.ts          # Test-Setup
 └── public/               # Statische Assets
 ```
 
@@ -115,6 +135,21 @@ npm run lint
 
 # Type-Checking
 npm run type-check
+
+# Code formatieren
+npm run format
+
+# Format-Check
+npm run format:check
+
+# Tests ausführen
+npm run test
+
+# Test UI öffnen
+npm run test:ui
+
+# Test Coverage
+npm run test:coverage
 ```
 
 ### Code-Qualität
@@ -122,18 +157,36 @@ npm run type-check
 Das Projekt verwendet strenge Code-Qualitätsstandards:
 
 - **ESLint**: Code-Linting mit Next.js-Regeln
-- **TypeScript**: Strenge Typisierung
-- **Prettier**: Code-Formatierung (empfohlen)
+- **TypeScript**: Strenge Typisierung mit erweiterten Checks
+  - `noUncheckedIndexedAccess`
+  - `noImplicitOverride`
+  - `noUnusedLocals`
+  - `noUnusedParameters`
+- **Prettier**: Automatische Code-Formatierung mit Tailwind Plugin
+- **Zod**: Schema-Validierung für API-Endpoints
 
 ### Testing
 
+Das Projekt nutzt **Vitest** mit React Testing Library:
+
 ```bash
-# Unit-Tests (falls implementiert)
+# Unit-Tests ausführen
 npm run test
 
-# E2E-Tests (falls implementiert)
-npm run test:e2e
+# Test UI (interaktiv)
+npm run test:ui
+
+# Coverage Report
+npm run test:coverage
 ```
+
+#### Custom Hooks Testing
+
+Alle Custom Hooks sind mit Unit Tests abgedeckt:
+- `useFavorites` - Favoriten-Verwaltung
+- `useLocalStorage` - localStorage Integration
+- `useIconSearch` - Such-/Filter-Logik
+- `usePagination` - Pagination-Logik
 
 ## 🚀 Deployment
 
@@ -174,6 +227,8 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert - siehe die [LICENSE](LICENSE
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-First CSS Framework
 - [Lucide](https://lucide.dev/) - Beautiful & consistent icon toolkit
 - [Vercel](https://vercel.com/) - Deployment-Plattform
+- [Vitest](https://vitest.dev/) - Blazing Fast Unit Test Framework
+- [Zod](https://zod.dev/) - TypeScript-first schema validation
 
 ## 📞 Support
 
