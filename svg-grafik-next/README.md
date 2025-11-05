@@ -1,6 +1,6 @@
 # SVG-Grafik Next.js
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-repo/svg-grafik-next)
+[![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://github.com/your-repo/svg-grafik-next)
 [![Next.js](https://img.shields.io/badge/Next.js-15.0.0-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-blue.svg)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0.0-38B2AC.svg)](https://tailwindcss.com/)

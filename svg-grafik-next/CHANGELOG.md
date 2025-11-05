@@ -5,6 +5,24 @@ Alle wichtigen Änderungen an der SVG-Grafik Next.js Applikation werden in diese
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-11-05
+
+### Fixed
+- Dependencies aktualisiert (ESLint, Tailwind CSS, PostCSS, TypeScript)
+- Deprecated npm warnings behoben
+- Build-Prozess stabilisiert
+- Lockfile-Konflikte aufgelöst
+
+## [1.0.1] - 2025-11-05
+
+### Fixed
+- Tailwind CSS Integration und Material Symbols Font
+- Vollständige Tailwind CSS Konfiguration implementiert
+- PostCSS Konfiguration hinzugefügt
+- Material Symbols Font Integration
+- Verbesserte .gitignore mit umfassenden Ausschlüssen
+- Dokumentation aktualisiert
+
 ## [1.0.0] - 2025-11-05
 
 ### 🎉 Added - Neue Features
