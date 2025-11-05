@@ -53,8 +53,11 @@ export async function GET() {
       if (!categories[icon.category]) {
         categories[icon.category] = { count: 0, icons: [] };
       }
-      categories[icon.category].count++;
-      categories[icon.category].icons.push(icon.name);
+      const category = categories[icon.category];
+      if (category) {
+        category.count++;
+        category.icons.push(icon.name);
+      }
     });
 
     const response = {

@@ -1,7 +1,7 @@
 'use client';
 
 import { IconGallery } from '@/components/gallery/icon-gallery';
-import { APP_VERSION, APP_NAME } from '@/lib/version';
+import { APP_VERSION } from '@/lib/version';
 
 export default function HomePage() {
   return (

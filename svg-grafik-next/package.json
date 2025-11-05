@@ -1,7 +1,6 @@
 {
   "name": "svg-grafik-next",
-  "version": "1.1.0",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "private": true,
   "description": "Eine interaktive SVG-Grafik-Galerie für Chatbot-Icons mit dynamischer Generierung",
   "author": "SVG-Grafik Team",
@@ -22,7 +21,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "clsx": "^2.1.1",
     "lucide-react": "^0.294.0",
-    "next": "^15.0.0",
+    "next": "^15.5.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "tailwind-merge": "^2.6.0",
@@ -37,21 +36,15 @@
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/ui": "^1.0.4",
-    "autoprefixer": "^10.0.0",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^15.0.0",
-    "jsdom": "^23.0.1",
-    "postcss": "^8.0.0",
-    "prettier": "^3.1.1",
-    "prettier-plugin-tailwindcss": "^0.5.9",
-    "tailwindcss": "^3.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.4"
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.0.0",
+    "jsdom": "^23.0.1",
     "postcss": "^8.4.49",
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
     "tailwindcss": "^3.4.15",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^1.0.4"
   }
 }

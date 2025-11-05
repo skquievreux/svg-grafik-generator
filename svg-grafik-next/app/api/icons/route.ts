@@ -47,7 +47,11 @@ export async function GET(request: NextRequest) {
       misc: { background: '#9E9E9E', border: '#FFFFFF', icon: '#FFFFFF' }
     };
 
-    const colors = categoryColors[category] || categoryColors.misc;
+    const colors = (categoryColors[category] || categoryColors.misc) as {
+      background: string;
+      border: string;
+      icon: string;
+    };
 
     // Symbol-Namen normalisieren
     const symbolMap: Record<string, string> = {

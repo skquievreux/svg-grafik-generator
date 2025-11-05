@@ -21,7 +21,7 @@ export function IconGallery() {
 
   // Custom Hooks
   const { data: galleryData, loading, error } = useGalleryData();
-  const { favorites, favoritesCount, toggleFavorite, isFavorite } = useFavorites();
+  const { favoritesCount, toggleFavorite, isFavorite } = useFavorites();
 
   // Gefilterte Icons
   const filteredIcons = useIconSearch(
