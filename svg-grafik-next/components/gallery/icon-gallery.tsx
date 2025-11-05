@@ -250,16 +250,15 @@ export function IconGallery() {
             )}
           >
             <div className={cn(
-              'icon-container',
-              viewMode === 'grid' && 'mb-4',
+              'flex items-center justify-center',
+              viewMode === 'grid' && 'mb-4 h-16',
               viewMode === 'list' && 'mb-0 flex-shrink-0'
             )}>
-              <div className="relative">
+              <div className="relative inline-block">
                 <DynamicIcon
                   name={icon.name}
                   category={icon.category}
                   size={viewMode === 'grid' ? 64 : 48}
-                  className="w-full h-full"
                 />
                 {favorites.has(icon.name) && (
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
