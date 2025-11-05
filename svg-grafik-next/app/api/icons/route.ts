@@ -1,19 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { IconGenerator } from '@/lib/icons/generator';
+import { iconQuerySchema } from '@/lib/api/schemas';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const name = searchParams.get('name');
-  const category = searchParams.get('category');
-  const shape = searchParams.get('shape') || 'octagon';
-  const size = parseInt(searchParams.get('size') || '40');
 
-  if (!name || !category) {
+  // Validierung mit Zod
+  const validation = iconQuerySchema.safeParse({
+    name: searchParams.get('name'),
+    category: searchParams.get('category'),
+    shape: searchParams.get('shape'),
+    size: searchParams.get('size'),
+  });
+
+  if (!validation.success) {
     return NextResponse.json(
-      { error: 'Name and category are required' },
+      {
+        error: 'Ungültige Parameter',
+        details: validation.error.format(),
+      },
       { status: 400 }
     );
   }
+
+  const { name, category, shape, size } = validation.data;
 
   try {
     // Kategorie-Farben definieren
