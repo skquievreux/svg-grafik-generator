@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const pkg = require('./package.json');
 
-const path = require('path');
-
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracingRoot: path.join(__dirname, '../'),
   env: {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
     NEXT_PUBLIC_APP_NAME: pkg.name,
