@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.0...v1.0.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* add eslintrc.json and configure workspace root to resolve CI lint errors ([53d0c79](https://github.com/skquievreux/svg-grafik-generator/commit/53d0c791be2377c443c85db50acabb6733838f3a))
+
 # 1.0.0 (2025-12-10)
 
 
