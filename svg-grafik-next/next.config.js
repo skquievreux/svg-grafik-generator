@@ -7,11 +7,14 @@ const nextConfig = {
     NEXT_PUBLIC_APP_NAME: pkg.name,
   },
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
   },
-  webpack: (config) => {
-    return config;
-  },
+  turbopack: {},
   async headers() {
     return [
       {
