@@ -102,7 +102,14 @@ export async function GET(request: NextRequest) {
       'Mode-Berater': 'heart',
       'Handwerks-Helfer': 'folder',
       'Eltern-Ratgeber': 'heart',
-      'Umwelt-Berater': 'flower'
+      'Umwelt-Berater': 'flower',
+      'Tasche': 'bag',
+      'Korb': 'basket',
+      'Barcode': 'barcode',
+      'Preisschild': 'tag',
+      'Rabatt': 'percent',
+      'Geschenk': 'gift',
+      'Laden': 'store'
     };
 
     const symbol = symbolMap[name] || name.toLowerCase().replace(/\s+/g, '-');
