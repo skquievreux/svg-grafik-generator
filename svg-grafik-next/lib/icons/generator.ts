@@ -44,7 +44,13 @@ function getSymbolPath(symbol: string): string {
 
 function getSymbolElement(symbol: string, size: number, color: string): string {
   const pathData = getSymbolPath(symbol);
-  const transform = `translate(${size * 0.2}, ${size * 0.2}) scale(${size * 0.006})`;
+
+  // Material Icons sind 24x24
+  // Wir wollen, dass das Icon 60% des Containers einnimmt
+  const scale = (size * 0.6) / 24;
+  const offset = size * 0.2; // (1 - 0.6) / 2 = 0.2
+
+  const transform = `translate(${offset}, ${offset}) scale(${scale})`;
   return `<path d="${pathData}" fill="${color}" transform="${transform}"/>`;
 }
 
