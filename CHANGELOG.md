@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.6...v1.0.7) (2025-12-10)
+
+
+### Bug Fixes
+
+* correct icon scaling factor to make symbols visible ([3b9b4f5](https://github.com/skquievreux/svg-grafik-generator/commit/3b9b4f50b38e483746c1615daf23dd7aab88fafe))
+
 ## [1.0.6](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.5...v1.0.6) (2025-12-10)
 
 
