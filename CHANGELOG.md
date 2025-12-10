@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.1...v1.0.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* restore package.json require in next.config.js to fix build ([757474c](https://github.com/skquievreux/svg-grafik-generator/commit/757474cc21397f79dc773fd118ae8b8ec9c26872))
+
 ## [1.0.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.0...v1.0.1) (2025-12-10)
 
 
