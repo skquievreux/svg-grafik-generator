@@ -237,8 +237,8 @@ export function IconGallery() {
             </Button>
             <div className="bg-gray-100/50 p-1 rounded-xl flex border border-gray-200">
               <Button
-                variant={viewMode === 'grid' ? 'white' : 'ghost'}
-                size="icon"
+                variant="ghost"
+                size="sm"
                 onClick={() => setViewMode('grid')}
                 className={cn("rounded-lg h-full px-4", viewMode === 'grid' && "shadow-sm bg-white")}
                 title="Raster"
@@ -246,8 +246,8 @@ export function IconGallery() {
                 <Grid className="h-5 w-5" />
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'white' : 'ghost'}
-                size="icon"
+                variant="ghost"
+                size="sm"
                 onClick={() => setViewMode('list')}
                 className={cn("rounded-lg h-full px-4", viewMode === 'list' && "shadow-sm bg-white")}
                 title="Liste"
