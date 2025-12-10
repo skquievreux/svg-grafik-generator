@@ -12,6 +12,9 @@ export async function GET(request: NextRequest) {
     category: searchParams.get('category') || undefined,
     shape: searchParams.get('shape') || undefined,
     size: searchParams.get('size') || undefined,
+    bgColor: searchParams.get('bgColor') || undefined,
+    borderColor: searchParams.get('borderColor') || undefined,
+    iconColor: searchParams.get('iconColor') || undefined,
   });
 
   if (!validation.success) {
@@ -24,10 +27,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { name, category, shape, size } = validation.data;
+  const { name, category, shape, size, bgColor, borderColor, iconColor } = validation.data;
 
   try {
-    // Kategorie-Farben definieren
+    // Kategorie-Farben definieren (Defaults)
     const categoryColors: Record<string, { background: string; border: string; icon: string }> = {
       food: { background: '#FF6B6B', border: '#FFFFFF', icon: '#FFFFFF' },
       health: { background: '#4CAF50', border: '#FFFFFF', icon: '#FFFFFF' },
@@ -48,10 +51,13 @@ export async function GET(request: NextRequest) {
       misc: { background: '#9E9E9E', border: '#FFFFFF', icon: '#FFFFFF' }
     };
 
-    const colors = (categoryColors[category] || categoryColors.misc) as {
-      background: string;
-      border: string;
-      icon: string;
+    const defaultColors = (categoryColors[category] || categoryColors.misc);
+
+    // Custom Colors haben Vorrang
+    const colors = {
+      background: bgColor || defaultColors.background,
+      border: borderColor || defaultColors.border,
+      icon: iconColor || defaultColors.icon
     };
 
     // Symbol-Namen normalisieren
