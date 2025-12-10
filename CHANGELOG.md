@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.0...v1.3.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* resolve Button prop type errors (variant/size) ([2b43008](https://github.com/skquievreux/svg-grafik-generator/commit/2b43008619cd2753c9b68293bb56b1b5cca947e3))
+
 # [1.3.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.2...v1.3.0) (2025-12-10)
 
 
