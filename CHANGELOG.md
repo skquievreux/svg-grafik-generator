@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.4...v1.0.5) (2025-12-10)
+
+
+### Bug Fixes
+
+* refactor IconGenerator to functional style and return error SVG on API failure ([a7a7d3b](https://github.com/skquievreux/svg-grafik-generator/commit/a7a7d3bc41f0ce43d363ec5dbddf980def9ba4d7))
+
 ## [1.0.4](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.3...v1.0.4) (2025-12-10)
 
 
