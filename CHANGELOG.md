@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.2...v1.0.3) (2025-12-10)
+
+
+### Bug Fixes
+
+* upgrade next.js to latest to resolve CVE-2025-66478 ([2a44859](https://github.com/skquievreux/svg-grafik-generator/commit/2a448590aa428c731f68f8bbd4ee21a8783d98e2))
+
 ## [1.0.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.1...v1.0.2) (2025-12-10)
 
 
