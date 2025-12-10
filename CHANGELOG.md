@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.1...v1.2.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* defaultColors undefined type error in icon route ([5d43df5](https://github.com/skquievreux/svg-grafik-generator/commit/5d43df57a8f9a2c1a40758136630ddebafa04346))
+
 ## [1.2.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.0...v1.2.1) (2025-12-10)
 
 
