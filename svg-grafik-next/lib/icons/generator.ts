@@ -113,10 +113,10 @@ function createShape(config: IconConfig): string {
   let shapeElement = getShapeElement(shape, size, colors.background);
 
   if (colors.border && colors.border !== colors.background) {
-    shapeElement = shapeElement.replace('>', ` stroke="${colors.border}" stroke-width="1">`);
+    shapeElement = shapeElement.replace('/>', ` stroke="${colors.border}" stroke-width="1"/>`);
   }
 
-  return shapeElement.replace('>', ` filter="url(#shadow)">`);
+  return shapeElement.replace('/>', ` filter="url(#shadow)"/>`);
 }
 
 export const IconGenerator = {
