@@ -1,6 +1,6 @@
 {
   "name": "svg-grafik-next",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Eine interaktive SVG-Grafik-Galerie für Chatbot-Icons mit dynamischer Generierung",
   "author": "SVG-Grafik Team",
