@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.1...v1.3.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* resolve icon duplication for shopping items ([1ae904b](https://github.com/skquievreux/svg-grafik-generator/commit/1ae904b4adb8597e3d3b028539567d95cf771f68))
+
 ## [1.3.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.0...v1.3.1) (2025-12-10)
 
 
