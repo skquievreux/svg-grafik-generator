@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "echo \"Building version $npm_package_version\" && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",

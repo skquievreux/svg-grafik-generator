@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: 'Eine interaktive Galerie von SVG-Grafiken für Chatbots mit dynamischer Generierung',
 };
 
+import { VersionLogger } from '@/components/ui/version-logger';
+
 export default function RootLayout({
   children,
 }: {
@@ -14,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className="font-sans antialiased">
+        <VersionLogger />
         {children}
       </body>
     </html>
