@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.3...v1.3.4) (2025-12-10)
+
+
+### Bug Fixes
+
+* add dynamic app icon generation to resolve favicon 404s ([9223131](https://github.com/skquievreux/svg-grafik-generator/commit/922313179181053583fc0db67b39f448ad7dd186))
+
 ## [1.3.3](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.2...v1.3.3) (2025-12-10)
 
 
