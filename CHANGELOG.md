@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.2...v1.3.0) (2025-12-10)
+
+
+### Features
+
+* modernize UI, animations, and gamification effects ([51be73a](https://github.com/skquievreux/svg-grafik-generator/commit/51be73a4cb6a28f9e8623ea13b5e73899f207430))
+
 ## [1.2.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.1...v1.2.2) (2025-12-10)
 
 
