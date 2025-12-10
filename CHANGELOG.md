@@ -1,0 +1,17 @@
+# 1.0.0 (2025-12-10)
+
+
+### Bug Fixes
+
+* Dependencies aktualisiert und Build-Probleme behoben ([d302c8a](https://github.com/skquievreux/svg-grafik-generator/commit/d302c8aeabced90f7347ee2e50884de7fd61bdbc))
+* Dependencies aktualisiert und TypeScript Strict Mode Fehler behoben ([5fb4c26](https://github.com/skquievreux/svg-grafik-generator/commit/5fb4c26725487e06741660abac36e3d720250e2d))
+* ensure CSS loading by using CommonJS postcss config and add fallback SVG dimensions ([df2a8fa](https://github.com/skquievreux/svg-grafik-generator/commit/df2a8fa2102218d539d8108c1dea7bdab26a6f82))
+* Layout-Probleme, Grafik-Styles und Icon-Darstellung behoben ([4f9e42d](https://github.com/skquievreux/svg-grafik-generator/commit/4f9e42d8b9278c807d341ffc66d7f6ff6114f55e))
+* Tailwind CSS Integration und Material Symbols Font ([8f59ef7](https://github.com/skquievreux/svg-grafik-generator/commit/8f59ef7293093e4532092c912b25150a32a5e898))
+
+
+### Features
+
+* implement professional version management logging in console and build ([26b12f9](https://github.com/skquievreux/svg-grafik-generator/commit/26b12f9b2698f00249f54cdecf02f140f0227415))
+* Major architecture improvements for v1.1.0 ([688a354](https://github.com/skquievreux/svg-grafik-generator/commit/688a3541f0166883085e7af3cebb7ae6688a0593))
+* Update to Next.js 15 and deploy to Vercel ([061edb2](https://github.com/skquievreux/svg-grafik-generator/commit/061edb235ef2e614c49d52aa4ce03d0c5ac70e89))
