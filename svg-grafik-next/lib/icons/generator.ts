@@ -44,97 +44,98 @@ function getSymbolPath(symbol: string): string {
     'percent': 'M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zm9 2L5 19h2l11.5-11h-2zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
     'gift': 'M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.8-2.31 2H11.3c-.35-1.2-1.26-2-2.31-2-1.66 0-3 1.34-3 3 0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15h-3v-8h3v8zm-5 0h-3v-8h3v8zm-5 0H7v-8h3v8zm-5 0H4v-8h3v8z',
     'store': 'M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z'
+  };
 
   return symbolPaths[symbol] || 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+}
+
+function getSymbolElement(symbol: string, size: number, color: string): string {
+  const pathData = getSymbolPath(symbol);
+
+  // Material Icons sind 24x24
+  // Wir wollen, dass das Icon 60% des Containers einnimmt
+  const scale = (size * 0.6) / 24;
+  const offset = size * 0.2; // (1 - 0.6) / 2 = 0.2
+
+  const transform = `translate(${offset}, ${offset}) scale(${scale})`;
+  return `<path d="${pathData}" fill="${color}" transform="${transform}"/>`;
+}
+
+function createSymbol(config: IconConfig): string {
+  const { symbol, colors, size } = config;
+  return getSymbolElement(symbol, size, colors.icon);
+}
+
+function createOctagon(size: number, color: string): string {
+  const points = [
+    size * 0.2, size * 0.1,
+    size * 0.8, size * 0.1,
+    size * 0.9, size * 0.2,
+    size * 0.9, size * 0.8,
+    size * 0.8, size * 0.9,
+    size * 0.2, size * 0.9,
+    size * 0.1, size * 0.8,
+    size * 0.1, size * 0.2
+  ];
+  return `<polygon points="${points.join(' ')}" fill="${color}"/>`;
+}
+
+function createCircle(size: number, color: string): string {
+  return `<circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.45}" fill="${color}"/>`;
+}
+
+function createSquare(size: number, color: string): string {
+  return `<rect x="${size * 0.1}" y="${size * 0.1}" width="${size * 0.8}" height="${size * 0.8}" fill="${color}"/>`;
+}
+
+function createHexagon(size: number, color: string): string {
+  const points = [
+    size * 0.5, size * 0.1,
+    size * 0.8, size * 0.25,
+    size * 0.8, size * 0.75,
+    size * 0.5, size * 0.9,
+    size * 0.2, size * 0.75,
+    size * 0.2, size * 0.25
+  ];
+  return `<polygon points="${points.join(' ')}" fill="${color}"/>`;
+}
+
+function getShapeElement(shape: string, size: number, color: string): string {
+  switch (shape) {
+    case 'octagon':
+      return createOctagon(size, color);
+    case 'circle':
+      return createCircle(size, color);
+    case 'square':
+      return createSquare(size, color);
+    case 'hexagon':
+      return createHexagon(size, color);
+    default:
+      return createCircle(size, color);
+  }
+}
+
+function createShape(config: IconConfig): string {
+  const { shape, colors, size } = config;
+  let shapeElement = getShapeElement(shape, size, colors.background);
+
+  if (colors.border && colors.border !== colors.background) {
+    shapeElement = shapeElement.replace('/>', ` stroke="${colors.border}" stroke-width="1"/>`);
   }
 
-  function getSymbolElement(symbol: string, size: number, color: string): string {
-    const pathData = getSymbolPath(symbol);
+  return shapeElement.replace('/>', ` filter="url(#shadow)"/>`);
+}
 
-    // Material Icons sind 24x24
-    // Wir wollen, dass das Icon 60% des Containers einnimmt
-    const scale = (size * 0.6) / 24;
-    const offset = size * 0.2; // (1 - 0.6) / 2 = 0.2
+export const IconGenerator = {
+  generateSVG(config: IconConfig): string {
+    const defs = createDefs();
+    const shape = createShape(config);
+    const symbol = createSymbol(config);
 
-    const transform = `translate(${offset}, ${offset}) scale(${scale})`;
-    return `<path d="${pathData}" fill="${color}" transform="${transform}"/>`;
-  }
-
-  function createSymbol(config: IconConfig): string {
-    const { symbol, colors, size } = config;
-    return getSymbolElement(symbol, size, colors.icon);
-  }
-
-  function createOctagon(size: number, color: string): string {
-    const points = [
-      size * 0.2, size * 0.1,
-      size * 0.8, size * 0.1,
-      size * 0.9, size * 0.2,
-      size * 0.9, size * 0.8,
-      size * 0.8, size * 0.9,
-      size * 0.2, size * 0.9,
-      size * 0.1, size * 0.8,
-      size * 0.1, size * 0.2
-    ];
-    return `<polygon points="${points.join(' ')}" fill="${color}"/>`;
-  }
-
-  function createCircle(size: number, color: string): string {
-    return `<circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.45}" fill="${color}"/>`;
-  }
-
-  function createSquare(size: number, color: string): string {
-    return `<rect x="${size * 0.1}" y="${size * 0.1}" width="${size * 0.8}" height="${size * 0.8}" fill="${color}"/>`;
-  }
-
-  function createHexagon(size: number, color: string): string {
-    const points = [
-      size * 0.5, size * 0.1,
-      size * 0.8, size * 0.25,
-      size * 0.8, size * 0.75,
-      size * 0.5, size * 0.9,
-      size * 0.2, size * 0.75,
-      size * 0.2, size * 0.25
-    ];
-    return `<polygon points="${points.join(' ')}" fill="${color}"/>`;
-  }
-
-  function getShapeElement(shape: string, size: number, color: string): string {
-    switch (shape) {
-      case 'octagon':
-        return createOctagon(size, color);
-      case 'circle':
-        return createCircle(size, color);
-      case 'square':
-        return createSquare(size, color);
-      case 'hexagon':
-        return createHexagon(size, color);
-      default:
-        return createCircle(size, color);
-    }
-  }
-
-  function createShape(config: IconConfig): string {
-    const { shape, colors, size } = config;
-    let shapeElement = getShapeElement(shape, size, colors.background);
-
-    if (colors.border && colors.border !== colors.background) {
-      shapeElement = shapeElement.replace('/>', ` stroke="${colors.border}" stroke-width="1"/>`);
-    }
-
-    return shapeElement.replace('/>', ` filter="url(#shadow)"/>`);
-  }
-
-  export const IconGenerator = {
-    generateSVG(config: IconConfig): string {
-      const defs = createDefs();
-      const shape = createShape(config);
-      const symbol = createSymbol(config);
-
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${config.size} ${config.size}" width="${config.size}" height="${config.size}">
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${config.size} ${config.size}" width="${config.size}" height="${config.size}">
   ${defs}
   ${shape}
   ${symbol}
 </svg>`;
-    }
-  };
+  }
+};
