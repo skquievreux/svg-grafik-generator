@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.0...v1.2.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* restore corrupted IconGallery component code ([44d2149](https://github.com/skquievreux/svg-grafik-generator/commit/44d214998e29e004407b899ce912d21f164568f5))
+
 # [1.2.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.1.0...v1.2.0) (2025-12-10)
 
 
