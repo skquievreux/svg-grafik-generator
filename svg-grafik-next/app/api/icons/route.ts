@@ -6,11 +6,12 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   // Validierung mit Zod
+  // Validierung mit Zod: Null-Werte zu undefined konvertieren, damit Defaults greifen
   const validation = iconQuerySchema.safeParse({
-    name: searchParams.get('name'),
-    category: searchParams.get('category'),
-    shape: searchParams.get('shape'),
-    size: searchParams.get('size'),
+    name: searchParams.get('name') || undefined,
+    category: searchParams.get('category') || undefined,
+    shape: searchParams.get('shape') || undefined,
+    size: searchParams.get('size') || undefined,
   });
 
   if (!validation.success) {
@@ -117,11 +118,24 @@ export async function GET(request: NextRequest) {
         'Access-Control-Allow-Origin': '*'
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Icon generation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate icon' },
-      { status: 500 }
-    );
+
+    // Return an error SVG so the user sees what happened
+    const errorColor = '#FF5252';
+    const errorSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#FFE5E5" stroke="${errorColor}" stroke-width="2"/>
+        <text x="50%" y="50%" font-family="Arial" font-size="14" fill="${errorColor}" text-anchor="middle" dy="-10">Icon Error</text>
+        <text x="50%" y="50%" font-family="Arial" font-size="10" fill="${errorColor}" text-anchor="middle" dy="15">${error.message || 'Unknown Error'}</text>
+      </svg>
+    `;
+
+    return new NextResponse(errorSvg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
   }
 }

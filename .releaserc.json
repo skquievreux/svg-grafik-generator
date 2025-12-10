@@ -6,13 +6,18 @@
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",
         "@semantic-release/changelog",
-        "@semantic-release/npm",
+        [
+            "@semantic-release/npm",
+            {
+                "npmPublish": false,
+                "pkgRoot": "svg-grafik-next"
+            }
+        ],
         [
             "@semantic-release/git",
             {
                 "assets": [
-                    "package.json",
-                    "package-lock.json",
+                    "svg-grafik-next/package.json",
                     "CHANGELOG.md"
                 ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"

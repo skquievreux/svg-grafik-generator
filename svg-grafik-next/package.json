@@ -1,13 +1,13 @@
 {
   "name": "svg-grafik-next",
-  "version": "1.1.1",
+  "version": "1.0.6",
   "private": true,
   "description": "Eine interaktive SVG-Grafik-Galerie für Chatbot-Icons mit dynamischer Generierung",
   "author": "SVG-Grafik Team",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "echo \"Building version $npm_package_version\" && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
@@ -21,13 +21,14 @@
     "@supabase/supabase-js": "^2.49.4",
     "clsx": "^2.1.1",
     "lucide-react": "^0.294.0",
-    "next": "^15.5.6",
+    "next": "^16.0.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.16",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
@@ -35,8 +36,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/ui": "^1.0.4",
-    "@tailwindcss/postcss": "^4.1.16",
+    "@vitest/ui": "^4.0.15",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.0.0",
@@ -45,6 +45,6 @@
     "prettier": "^3.1.1",
     "tailwindcss": "^4.1.16",
     "typescript": "^5.7.2",
-    "vitest": "^1.0.4"
+    "vitest": "^4.0.15"
   }
 }
