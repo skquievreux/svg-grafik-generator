@@ -51,7 +51,8 @@ export async function GET(request: NextRequest) {
       misc: { background: '#9E9E9E', border: '#FFFFFF', icon: '#FFFFFF' }
     };
 
-    const defaultColors = (categoryColors[category] || categoryColors.misc);
+    const fallback = { background: '#9E9E9E', border: '#FFFFFF', icon: '#FFFFFF' };
+    const defaultColors = (category ? categoryColors[category] : undefined) || categoryColors.misc || fallback;
 
     // Custom Colors haben Vorrang
     const colors = {
