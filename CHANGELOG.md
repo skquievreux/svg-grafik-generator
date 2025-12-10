@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.3...v1.0.4) (2025-12-10)
+
+
+### Bug Fixes
+
+* explicit turbopack config and update image domains for next 16 ([86fa55f](https://github.com/skquievreux/svg-grafik-generator/commit/86fa55f9e0c5a46be4e4775dcce2326eacdeea0c))
+
 ## [1.0.3](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.2...v1.0.3) (2025-12-10)
 
 
