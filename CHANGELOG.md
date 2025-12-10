@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.1.0...v1.2.0) (2025-12-10)
+
+
+### Features
+
+* expand mock data to 20+ icons per category ([657e7ee](https://github.com/skquievreux/svg-grafik-generator/commit/657e7ee591a1288be806738bbe385d5ace82c310))
+* implement color customization ui and logic ([63c33d3](https://github.com/skquievreux/svg-grafik-generator/commit/63c33d3c3318bb1877ea1daeb9f83567fbfcfe34))
+
 # [1.1.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.6...v1.1.0) (2025-12-10)
 
 
