@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.5...v1.0.6) (2025-12-10)
+
+
+### Bug Fixes
+
+* handle optional query params correctly in API route ([9375ffe](https://github.com/skquievreux/svg-grafik-generator/commit/9375ffefccfc13c2f81b9d71d76874bf23d5af9a))
+
 ## [1.0.5](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.4...v1.0.5) (2025-12-10)
 
 
