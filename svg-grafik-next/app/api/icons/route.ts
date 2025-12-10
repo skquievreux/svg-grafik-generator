@@ -117,11 +117,24 @@ export async function GET(request: NextRequest) {
         'Access-Control-Allow-Origin': '*'
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Icon generation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate icon' },
-      { status: 500 }
-    );
+
+    // Return an error SVG so the user sees what happened
+    const errorColor = '#FF5252';
+    const errorSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#FFE5E5" stroke="${errorColor}" stroke-width="2"/>
+        <text x="50%" y="50%" font-family="Arial" font-size="14" fill="${errorColor}" text-anchor="middle" dy="-10">Icon Error</text>
+        <text x="50%" y="50%" font-family="Arial" font-size="10" fill="${errorColor}" text-anchor="middle" dy="15">${error.message || 'Unknown Error'}</text>
+      </svg>
+    `;
+
+    return new NextResponse(errorSvg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
   }
 }
