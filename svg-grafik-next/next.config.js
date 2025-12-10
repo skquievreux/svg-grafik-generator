@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
+  webpack: (config) => {
+    return config;
+  },
   async headers() {
     return [
       {

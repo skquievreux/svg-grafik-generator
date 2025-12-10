@@ -1,4 +1,4 @@
-// File: c:\CODE\GIT\SVG-Grafik\svg-grafik-next\app\api\icons\route.ts
+// File: C:\CODE\GIT\SVG-Grafik\svg-grafik-next\app\api\icons\route.ts
 import * as entry from '../../../../../app/api/icons/route.js'
 import type { NextRequest } from 'next/server.js'
 

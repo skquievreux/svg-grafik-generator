@@ -2,7 +2,6 @@
   "version": 1,
   "config": {
     "env": {},
-    "webpack": null,
     "eslint": {
       "ignoreDuringBuilds": false
     },
@@ -100,7 +99,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "c:\\CODE\\GIT",
+    "outputFileTracingRoot": "C:\\CODE\\GIT",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -290,10 +289,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.js",
     "turbopack": {
-      "root": "c:\\CODE\\GIT"
+      "root": "C:\\CODE\\GIT"
     }
   },
-  "appDir": "c:\\CODE\\GIT\\SVG-Grafik\\svg-grafik-next",
+  "appDir": "C:\\CODE\\GIT\\SVG-Grafik\\svg-grafik-next",
   "relativeAppDir": "SVG-Grafik\\svg-grafik-next",
   "files": [
     ".next\\routes-manifest.json",
