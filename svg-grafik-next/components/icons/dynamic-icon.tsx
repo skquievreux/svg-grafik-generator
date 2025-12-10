@@ -9,6 +9,9 @@ interface DynamicIconProps {
   size?: number;
   className?: string;
   showLoading?: boolean;
+  bgColor?: string;
+  borderColor?: string;
+  iconColor?: string;
 }
 
 export function DynamicIcon({
@@ -16,7 +19,10 @@ export function DynamicIcon({
   category,
   size = 40,
   className,
-  showLoading = true
+  showLoading = true,
+  bgColor,
+  borderColor,
+  iconColor
 }: DynamicIconProps) {
   const [svgContent, setSvgContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -28,9 +34,17 @@ export function DynamicIcon({
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `/api/icons?name=${encodeURIComponent(name)}&category=${category}&size=${size}`
-        );
+        const params = new URLSearchParams({
+          name,
+          category,
+          size: size.toString(),
+        });
+
+        if (bgColor) params.append('bgColor', bgColor);
+        if (borderColor) params.append('borderColor', borderColor);
+        if (iconColor) params.append('iconColor', iconColor);
+
+        const response = await fetch(`/api/icons?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
@@ -47,7 +61,7 @@ export function DynamicIcon({
     };
 
     loadIcon();
-  }, [name, category, size]);
+  }, [name, category, size, bgColor, borderColor, iconColor]);
 
   if (error) {
     return (
