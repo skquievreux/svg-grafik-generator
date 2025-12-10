@@ -6,11 +6,12 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   // Validierung mit Zod
+  // Validierung mit Zod: Null-Werte zu undefined konvertieren, damit Defaults greifen
   const validation = iconQuerySchema.safeParse({
-    name: searchParams.get('name'),
-    category: searchParams.get('category'),
-    shape: searchParams.get('shape'),
-    size: searchParams.get('size'),
+    name: searchParams.get('name') || undefined,
+    category: searchParams.get('category') || undefined,
+    shape: searchParams.get('shape') || undefined,
+    size: searchParams.get('size') || undefined,
   });
 
   if (!validation.success) {
