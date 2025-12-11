@@ -35,19 +35,25 @@ export function IconGallery() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  // Theme Effect
+  // Initialize theme from localStorage
   useEffect(() => {
-    console.log('Testing Theme Toggle. Current state:', theme); // Debug Log
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      console.log('[Theme] Loaded from localStorage:', savedTheme);
+    }
+  }, []);
+
+  // Theme Effect - Apply and persist
+  useEffect(() => {
+    console.log('[Theme] Applying theme:', theme);
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
+    root.classList.add(theme);
 
-    if (theme === 'dark') {
-      root.classList.add('dark');
-      console.log('Applied DARK class to HTML element');
-    } else {
-      root.classList.add('light'); // Explicitly add light for strict CSS frameworks
-      console.log('Applied LIGHT class to HTML element');
-    }
+    // Persist to localStorage
+    localStorage.setItem('theme', theme);
+    console.log('[Theme] Saved to localStorage:', theme);
   }, [theme]);
 
   // Custom Colors State
