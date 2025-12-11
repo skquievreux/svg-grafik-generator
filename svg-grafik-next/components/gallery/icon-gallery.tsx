@@ -5,6 +5,7 @@ import { DynamicIcon } from '@/components/icons/dynamic-icon';
 import { Button } from '@/components/ui/button';
 import { cn, formatCategoryName, copyToClipboard, downloadSVG } from '@/lib/utils';
 import { Search, Grid, List, Download, Copy, Heart, Palette, RotateCcw } from 'lucide-react';
+import { IconViewerModal } from './icon-viewer-modal';
 
 interface Icon {
   name: string;
@@ -41,6 +42,17 @@ export function IconGallery() {
     iconColor: ''
   });
 
+  // Viewer Modal State
+  const [viewerState, setViewerState] = useState<{
+    isOpen: boolean;
+    iconName: string | null;
+    category: string | null;
+  }>({
+    isOpen: false,
+    iconName: null,
+    category: null
+  });
+
   useEffect(() => {
     fetch('/api/gallery')
       .then(res => res.json())
@@ -64,6 +76,36 @@ export function IconGallery() {
       }
     }
   }, []);
+
+  // Load persisted theme
+  useEffect(() => {
+    const savedTheme = sessionStorage.getItem('svg-icon-theme');
+    if (savedTheme) {
+      try {
+        setCustomColors(JSON.parse(savedTheme));
+      } catch (e) {
+        console.error("Failed to load theme", e);
+      }
+    }
+  }, []);
+
+  const handleApplyPalette = (colors: { background: string; border: string; icon: string }) => {
+    const newColors = {
+      bgColor: colors.background,
+      borderColor: colors.border,
+      iconColor: colors.icon
+    };
+    setCustomColors(newColors);
+    sessionStorage.setItem('svg-icon-theme', JSON.stringify(newColors));
+  };
+
+  const openViewer = (icon: Icon) => {
+    setViewerState({
+      isOpen: true,
+      iconName: icon.name,
+      category: icon.category
+    });
+  };
 
   const filteredIcons = useMemo(() => {
     if (!galleryData) return [];
@@ -146,13 +188,12 @@ export function IconGallery() {
       const svgCode = await response.text();
       await copyToClipboard(svgCode);
 
-      // Visual feedback
+      // Visual feedback - simple for now
       const btn = e.currentTarget as HTMLButtonElement;
-      btn.innerHTML = '<span class="text-green-600 font-bold">Kopiert!</span>';
+      const originalInner = btn.innerHTML;
+      btn.innerHTML = '<span class="text-green-600 font-bold">✓</span>';
       setTimeout(() => {
-        // Since we are using Lucide icons, simple re-render triggers reset, strictly speaking updating state is better but direct DOM manipulation for instant feedback works too for simple things. 
-        // Actually, let's just trigger a small pulse or state instead. 
-        // For now, let's revert logic: purely visual logic is complex without state.
+        btn.innerHTML = originalInner;
       }, 1000);
 
     } catch (error) {
@@ -341,29 +382,31 @@ export function IconGallery() {
 
       {/* Grid */}
       <div className={cn(
-        'gallery-grid pb-20 justify-items-center', // Added justify-items-center to ensure grid items are centered in their columns
+        'gallery-grid pb-20 justify-items-center',
         viewMode === 'grid'
           ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
           : 'flex flex-col gap-4'
       )}>
         {paginatedIcons.map((icon, index) => {
-          // Staggered Delay Logic - Cycle through generic delay classes
           const delayClass = `delay-${(index % 5) * 100}`;
 
           return (
             <div
               key={icon.name}
               className={cn(
-                'card-3d-wrapper animate-pop-in w-full max-w-[280px]', // Wrapper for 3D effect
+                'card-3d-wrapper animate-pop-in w-full max-w-[280px]',
                 viewMode === 'list' && 'max-w-none',
-                delayClass // Apply staggered delay
+                delayClass
               )}
             >
-              <div className={cn(
-                'card-3d group bg-white rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300',
-                viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200',
-                viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200'
-              )}>
+              <div
+                className={cn(
+                  'card-3d group bg-white rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300 cursor-pointer',
+                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200',
+                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200'
+                )}
+                onClick={() => openViewer(icon)}
+              >
                 {/* Hover Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/30 group-hover:to-purple-50/30 transition-all duration-500 pointer-events-none" />
 
@@ -398,11 +441,11 @@ export function IconGallery() {
                     {formatCategoryName(icon.category)}
                   </div>
 
-                  {/* Actions - Visible on hover/focus or always in list */}
+                  {/* Actions - Prevent propagation to not trigger viewer when action clicked */}
                   <div className={cn(
                     "flex gap-2 transition-all duration-300",
                     viewMode === 'grid' ? "justify-center opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" : "opacity-100"
-                  )}>
+                  )} onClick={(e) => e.stopPropagation()}>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -467,6 +510,15 @@ export function IconGallery() {
           </Button>
         </div>
       )}
+
+      {/* Modal */}
+      <IconViewerModal
+        isOpen={viewerState.isOpen}
+        onClose={() => setViewerState(prev => ({ ...prev, isOpen: false }))}
+        iconName={viewerState.iconName}
+        category={viewerState.category}
+        onApplyPalette={handleApplyPalette}
+      />
     </div>
   );
 }
