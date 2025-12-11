@@ -156,7 +156,14 @@ export function IconGallery() {
 
     if (customColors.bgColor) params.append('bgColor', customColors.bgColor);
     if (customColors.borderColor) params.append('borderColor', customColors.borderColor);
-    if (customColors.iconColor) params.append('iconColor', customColors.iconColor);
+
+    // Set icon color based on theme if not customized
+    if (customColors.iconColor) {
+      params.append('iconColor', customColors.iconColor);
+    } else {
+      // Auto-adjust icon color based on theme for better contrast
+      params.append('iconColor', theme === 'dark' ? '#FFFFFF' : '#000000');
+    }
 
     return params;
   };
@@ -496,9 +503,9 @@ export function IconGallery() {
             >
               <div
                 className={cn(
-                  'card-3d group bg-white dark:bg-space-800 dark:border-space-700 rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300 cursor-pointer',
-                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200 dark:hover:border-neon-purple',
-                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200 dark:hover:border-neon-purple'
+                  'card-3d group bg-white dark:bg-space-950 rounded-2xl border border-gray-200 dark:border-space-800 relative overflow-hidden transition-all duration-300 cursor-pointer shadow-sm dark:shadow-lg',
+                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-300 dark:hover:border-neon-gold hover:shadow-md dark:hover:shadow-neon-gold/20',
+                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-300 dark:hover:border-neon-gold'
                 )}
                 onClick={() => openViewer(icon)}
               >
@@ -545,7 +552,7 @@ export function IconGallery() {
                     size={viewMode === 'grid' ? 64 : 48}
                     bgColor={customColors.bgColor}
                     borderColor={customColors.borderColor}
-                    iconColor={customColors.iconColor}
+                    iconColor={customColors.iconColor || (theme === 'dark' ? '#FFFFFF' : '#000000')}
                   />
                 </div>
 

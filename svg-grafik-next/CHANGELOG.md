@@ -5,6 +5,18 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2025-12-11
+
+### 🐛 Bug Fixes: Dark Mode Kontrast
+- **Maximaler Kontrast**: Icon-Cards verwenden jetzt `space-950` (tiefster Schwarz-Ton) im Dark Mode
+- **Automatische Icon-Farben**: Icons sind jetzt automatisch **weiß im Dark Mode** und **schwarz im Light Mode** für optimalen Kontrast
+- **Verbesserte Hover-Effekte**: Gold-Neon-Glow bei Hover im Dark Mode für bessere Sichtbarkeit
+- **Stärkere Schatten**: Dark Mode Cards haben jetzt deutlichere Schatten für bessere Tiefe
+
+### 🎨 Design Improvements
+- Hellere Border-Farben für bessere Abgrenzung
+- Optimierte Shadow-Werte für beide Modi
+
 ## [1.7.0] - 2025-12-11
 
 ### 🎉 New Features: Multi-Tag Search & Complete Dark Mode
