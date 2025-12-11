@@ -280,7 +280,7 @@ export function IconGallery() {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
+              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
             />
           </div>
 
