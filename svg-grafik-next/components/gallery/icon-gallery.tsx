@@ -11,9 +11,11 @@ import { IconViewerModal } from './icon-viewer-modal';
 interface Icon {
   name: string;
   category: string;
+  tags: string[];
 }
 
 interface GalleryData {
+  icons: Icon[];
   categories: Record<string, { count: number; icons: string[] }>;
   metadata: {
     total: number;
@@ -25,6 +27,7 @@ export function IconGallery() {
   const [galleryData, setGalleryData] = useState<GalleryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(24);
@@ -32,13 +35,25 @@ export function IconGallery() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  // Theme Effect
+  // Initialize theme from localStorage
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      console.log('[Theme] Loaded from localStorage:', savedTheme);
     }
+  }, []);
+
+  // Theme Effect - Apply and persist
+  useEffect(() => {
+    console.log('[Theme] Applying theme:', theme);
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+
+    // Persist to localStorage
+    localStorage.setItem('theme', theme);
+    console.log('[Theme] Saved to localStorage:', theme);
   }, [theme]);
 
   // Custom Colors State
@@ -92,25 +107,34 @@ export function IconGallery() {
   const filteredIcons = useMemo(() => {
     if (!galleryData) return [];
 
-    let icons: Icon[] = [];
+    let icons: Icon[] = galleryData.icons;
 
-    if (selectedCategory === 'all') {
-      galleryData.metadata.categories.forEach(cat => {
-        if (galleryData.categories[cat]) {
-          icons.push(...galleryData.categories[cat].icons.map(name => ({ name, category: cat })));
-        }
-      });
-    } else if (galleryData.categories[selectedCategory]) {
-      icons = galleryData.categories[selectedCategory].icons.map(name => ({ name, category: selectedCategory }));
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      icons = icons.filter(icon => icon.category === selectedCategory);
     }
 
+    // Filter by search term (searches name, category, and tags)
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      icons = icons.filter(icon => icon.name.toLowerCase().includes(term));
+      icons = icons.filter(icon =>
+        icon.name.toLowerCase().includes(term) ||
+        icon.category.toLowerCase().includes(term) ||
+        icon.tags.some(tag => tag.toLowerCase().includes(term))
+      );
+    }
+
+    // Filter by selected tags (OR logic - icon must have at least one of the selected tags)
+    if (selectedTags.length > 0) {
+      icons = icons.filter(icon =>
+        selectedTags.some(selectedTag =>
+          icon.tags.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
+        )
+      );
     }
 
     return icons;
-  }, [galleryData, selectedCategory, searchTerm]);
+  }, [galleryData, selectedCategory, searchTerm, selectedTags]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredIcons.length / itemsPerPage);
@@ -138,7 +162,14 @@ export function IconGallery() {
 
     if (customColors.bgColor) params.append('bgColor', customColors.bgColor);
     if (customColors.borderColor) params.append('borderColor', customColors.borderColor);
-    if (customColors.iconColor) params.append('iconColor', customColors.iconColor);
+
+    // Set icon color based on theme if not customized
+    if (customColors.iconColor) {
+      params.append('iconColor', customColors.iconColor);
+    } else {
+      // Auto-adjust icon color based on theme for better contrast
+      params.append('iconColor', theme === 'dark' ? '#FFFFFF' : '#000000');
+    }
 
     return params;
   };
@@ -274,9 +305,38 @@ export function IconGallery() {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
+              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
             />
           </div>
+
+          {/* Selected Tags Display */}
+          {selectedTags.length > 0 && (
+            <div className="flex-1 flex flex-wrap items-center gap-2 p-3 bg-blue-50 dark:bg-space-light/10 rounded-xl border border-blue-200 dark:border-space-light/20">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Aktive Tags:</span>
+              {selectedTags.map((tag, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setSelectedTags(prev => prev.filter(t => t !== tag));
+                    setCurrentPage(1);
+                  }}
+                  className="group flex items-center gap-1 px-3 py-1 text-sm font-medium bg-blue-500 dark:bg-neon-purple text-white rounded-full hover:bg-blue-600 dark:hover:bg-neon-purple/80 transition-colors"
+                >
+                  {tag}
+                  <span className="text-xs opacity-70 group-hover:opacity-100">×</span>
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  setSelectedTags([]);
+                  setCurrentPage(1);
+                }}
+                className="ml-auto text-xs font-semibold text-red-600 dark:text-red-400 hover:underline"
+              >
+                Alle entfernen
+              </button>
+            </div>
+          )}
 
           <select
             value={selectedCategory}
@@ -284,7 +344,7 @@ export function IconGallery() {
               setSelectedCategory(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-6 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none"
+            className="px-6 py-4 text-base md:text-lg bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none shadow-sm"
           >
             <option value="all" className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">Alle Kategorien ({galleryData.metadata.total})</option>
             {galleryData.metadata.categories.map(category => (
@@ -449,9 +509,9 @@ export function IconGallery() {
             >
               <div
                 className={cn(
-                  'card-3d group bg-white dark:bg-space-800 dark:border-space-700 rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300 cursor-pointer',
-                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200 dark:hover:border-neon-purple',
-                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200 dark:hover:border-neon-purple'
+                  'card-3d group bg-white dark:bg-space-950 rounded-2xl border border-gray-200 dark:border-space-800 relative overflow-hidden transition-all duration-300 cursor-pointer shadow-sm dark:shadow-lg',
+                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-300 dark:hover:border-neon-gold hover:shadow-md dark:hover:shadow-neon-gold/20',
+                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-300 dark:hover:border-neon-gold'
                 )}
                 onClick={() => openViewer(icon)}
               >
@@ -498,13 +558,34 @@ export function IconGallery() {
                     size={viewMode === 'grid' ? 64 : 48}
                     bgColor={customColors.bgColor}
                     borderColor={customColors.borderColor}
-                    iconColor={customColors.iconColor}
+                    iconColor={customColors.iconColor || (theme === 'dark' ? '#FFFFFF' : '#000000')}
                   />
                 </div>
 
                 <div className={cn("text-center", viewMode === 'list' && "text-left")}>
                   <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">{icon.name}</h3>
-                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase">{icon.category}</span>
+                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase block mb-2">{icon.category}</span>
+
+                  {/* Tag Chips */}
+                  <div className="flex flex-wrap gap-1 justify-center">
+                    {icon.tags.slice(0, 3).map((tag, idx) => (
+                      <button
+                        key={idx}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Add tag if not already selected
+                          if (!selectedTags.includes(tag)) {
+                            setSelectedTags(prev => [...prev, tag]);
+                            setCurrentPage(1);
+                          }
+                        }}
+                        className="px-2 py-0.5 text-[10px] font-medium bg-blue-50 dark:bg-space-light/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-space-light/30 transition-colors"
+                        title={`Suche nach "${tag}"`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

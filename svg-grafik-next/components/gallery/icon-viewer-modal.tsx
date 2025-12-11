@@ -46,17 +46,17 @@ export function IconViewerModal({ isOpen, onClose, iconName, category, onApplyPa
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[700px] bg-white/95 backdrop-blur-xl border-white/20 shadow-2xl">
+            <DialogContent className="sm:max-w-[700px] bg-white/95 dark:bg-space-900/95 backdrop-blur-xl border-white/20 dark:border-space-light/20 shadow-2xl">
                 <DialogHeader>
                     <div className="flex items-center justify-between">
-                        <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                        <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
                             Smart Design: {iconName}
                         </DialogTitle>
                         <Button variant="ghost" size="sm" onClick={regeneratePalettes} title="Neue Vorschläge generieren" className="h-8 w-8 p-0 rounded-full">
                             <Wand2 className="h-5 w-5 text-purple-500 hover:rotate-12 transition-transform" />
                         </Button>
                     </div>
-                    <DialogDescription className="text-gray-500">
+                    <DialogDescription className="text-gray-600 dark:text-gray-300">
                         Wähle ein intelligentes Farbschema. Deine Auswahl wird <strong>automatisch auf alle Icons</strong> angewendet.
                     </DialogDescription>
                 </DialogHeader>
@@ -68,8 +68,8 @@ export function IconViewerModal({ isOpen, onClose, iconName, category, onApplyPa
                             className={cn(
                                 "group relative flex flex-col items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105",
                                 selectedPaletteId === palette.id
-                                    ? "border-blue-500 bg-blue-50/50 shadow-lg scale-105"
-                                    : "border-transparent bg-gray-50 hover:bg-white hover:shadow-md hover:border-gray-200"
+                                    ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/30 shadow-lg scale-105"
+                                    : "border-transparent bg-gray-50 dark:bg-space-900 hover:bg-white dark:hover:bg-space-800 hover:shadow-md hover:border-gray-200 dark:hover:border-space-light"
                             )}
                             onClick={() => handleApply(palette)}
                         >
@@ -91,8 +91,8 @@ export function IconViewerModal({ isOpen, onClose, iconName, category, onApplyPa
                             </div>
 
                             <div className="text-center w-full">
-                                <h3 className="font-semibold text-gray-900 mb-1">{palette.name}</h3>
-                                <p className="text-xs text-gray-400 capitalize mb-3">{palette.type}</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{palette.name}</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize mb-3">{palette.type}</p>
 
                                 {/* Color Swatches */}
                                 <div className="flex justify-center gap-2 mt-2">
@@ -105,7 +105,7 @@ export function IconViewerModal({ isOpen, onClose, iconName, category, onApplyPa
                     ))}
                 </div>
 
-                <div className="flex justify-end gap-3 mt-2 border-t pt-4 border-gray-100">
+                <div className="flex justify-end gap-3 mt-2 border-t pt-4 border-gray-100 dark:border-space-800">
                     <Button variant="outline" onClick={onClose}>
                         Schließen
                     </Button>
