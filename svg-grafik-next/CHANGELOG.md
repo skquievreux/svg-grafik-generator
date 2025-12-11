@@ -5,6 +5,20 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2025-12-11
+
+### 🎉 Added (Hinzugefügt)
+
+#### Icon System Upgrade
+- **Umfassende Icon-Erweiterung**: Über 80 neue, hochwertige SVG-Pfade hinzugefügt.
+  - Abdeckung aller Kategorien: Essen, Gesundheit, Reise, Finanzen, Werkzeuge, Technik, Zuhause, Haustiere, UI.
+  - Spezifische Icons für bisher fehlende Begriffe wie "Pizza", "Eis", "Krankenwagen", "Geldbeutel" etc.
+- **Intelligentes Mapping**:
+  - Vollständige Überarbeitung der `symbolMap` in der API.
+  - Direkte Zuordnung aller deutschen Begriffe aus der Galerie zu den passenden englischen Icon-Keys.
+  - Fallback-Strategie auf generische "Sterne" eliminiert.
+- **Konzept-Dokumentation**: `ICON_GENERATION_CONCEPT.md` erstellt für zukünftige Skalierung (KI-Generierung).
+
 ## [1.1.0] - 2025-11-05
 
 ### 🎉 Added (Hinzugefügt)
