@@ -1,3 +1,24 @@
+# [1.7.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.6.0...v1.7.0) (2025-12-11)
+
+
+### Bug Fixes
+
+* styling contrast issues and added social sharing concept ([1a7b4cf](https://github.com/skquievreux/svg-grafik-generator/commit/1a7b4cf7f7ca4db6137c15b10b67b020be143163))
+* **theme:** correct css variables and body styles for light/dark mode toggle ([c604bd0](https://github.com/skquievreux/svg-grafik-generator/commit/c604bd0aad164e944ef7b6d19070ada4018e847a))
+* **ui:** enforce dark text color on search input in light mode ([37a1ec1](https://github.com/skquievreux/svg-grafik-generator/commit/37a1ec1f050975a5f1eb42fb176334ecb86adb8c))
+* **v1.7.1:** improve dark mode contrast with deeper backgrounds and auto icon colors ([5adf2b3](https://github.com/skquievreux/svg-grafik-generator/commit/5adf2b3970935e21affd3349734ae729c5f3ff68))
+* **v1.7.2:** resolve hydration mismatch with blocking theme script ([5e56dfb](https://github.com/skquievreux/svg-grafik-generator/commit/5e56dfb5b86b38779663f89bfdcdfeda96dff974))
+* **v1.8.0:** implement Tailwind v4 with [@custom-variant](https://github.com/custom-variant) dark mode - WORKING! ([9f081d4](https://github.com/skquievreux/svg-grafik-generator/commit/9f081d4ce7386dcfa7c0468a235057ff4595e45e))
+* **v1.8.1:** add dark mode support to icon viewer modal ([6db87c8](https://github.com/skquievreux/svg-grafik-generator/commit/6db87c8ad76c395b47bc4959d8791a97cc596fba))
+
+
+### Features
+
+* **v1.6.0:** implement smart tagging system with clickable tag chips and enhanced search ([d7ea200](https://github.com/skquievreux/svg-grafik-generator/commit/d7ea2002ded424c12acf3fb9f16b8c4416cb7d65))
+* **v1.7.0:** multi-tag search with OR logic and complete dark mode support ([ee4fc86](https://github.com/skquievreux/svg-grafik-generator/commit/ee4fc86f54596d00102f498bb42d345cda3a84fb))
+* **v1.8.2:** auto-adjust icon colors based on dark/light mode ([db2a719](https://github.com/skquievreux/svg-grafik-generator/commit/db2a719a452c1d75618d2738e03be12fbcc0911f))
+* **v1.9.0:** add footer with developer credit and fix hydration warning ([5eac6ad](https://github.com/skquievreux/svg-grafik-generator/commit/5eac6add39a8aa0945361d5ad4143411e710af65))
+
 # [1.6.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.5.0...v1.6.0) (2025-12-11)
 
 
