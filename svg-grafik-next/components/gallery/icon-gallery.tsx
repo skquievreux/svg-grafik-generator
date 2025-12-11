@@ -343,7 +343,7 @@ export function IconGallery() {
       <div className={cn(
         'gallery-grid pb-20 justify-items-center', // Added justify-items-center to ensure grid items are centered in their columns
         viewMode === 'grid'
-          ? 'grid gap-8'
+          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
           : 'flex flex-col gap-4'
       )}>
         {paginatedIcons.map((icon, index) => {
