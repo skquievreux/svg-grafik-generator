@@ -116,7 +116,7 @@
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* Confetti Particle Animation (kept or improved) */
+/* Confetti Particle Animation */
 .confetti-piece {
   position: absolute;
   width: 8px;
@@ -125,4 +125,19 @@
   opacity: 0;
   pointer-events: none;
   z-index: 9999;
+}
+
+/* Glass Card Utility for Light/Dark Mode */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.dark .glass-card {
+  background: rgba(10, 11, 30, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }

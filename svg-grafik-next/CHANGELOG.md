@@ -5,6 +5,20 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2025-12-11
+
+### 🎉 New Features: Multi-Tag Search & Complete Dark Mode
+- **Multi-Tag-Suche mit OR-Verknüpfung**: Tags können jetzt kombiniert werden - Icons werden angezeigt, wenn sie MINDESTENS EINEN der ausgewählten Tags enthalten
+- **Tag-Chips Management**: Ausgewählte Tags werden als entfernbare Chips über der Galerie angezeigt
+- **Keine Duplikate**: Tags werden nur einmal hinzugefügt, auch bei mehrfachem Klick
+- **Vollständiger Dark Mode**: Alle UI-Elemente (Cards, Panels, Inputs) passen sich jetzt korrekt an den Dark Mode an
+- **Glass-Card Effekt**: Glassmorphism-Effekt funktioniert jetzt in beiden Modi
+
+### 🔧 Technical Improvements
+- `selectedTags` State-Array für Multi-Tag-Filterung
+- Optimierte Filter-Logik mit OR-Verknüpfung
+- Dark-Mode-spezifische Styles für `.glass-card` Utility-Klasse
+
 ## [1.6.0] - 2025-12-11
 
 ### 🎉 New Features: Smart Tagging System

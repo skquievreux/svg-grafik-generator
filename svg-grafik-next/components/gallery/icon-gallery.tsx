@@ -27,6 +27,7 @@ export function IconGallery() {
   const [galleryData, setGalleryData] = useState<GalleryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(24);
@@ -117,8 +118,17 @@ export function IconGallery() {
       );
     }
 
+    // Filter by selected tags (OR logic - icon must have at least one of the selected tags)
+    if (selectedTags.length > 0) {
+      icons = icons.filter(icon =>
+        selectedTags.some(selectedTag =>
+          icon.tags.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
+        )
+      );
+    }
+
     return icons;
-  }, [galleryData, selectedCategory, searchTerm]);
+  }, [galleryData, selectedCategory, searchTerm, selectedTags]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredIcons.length / itemsPerPage);
@@ -285,6 +295,35 @@ export function IconGallery() {
               className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
             />
           </div>
+
+          {/* Selected Tags Display */}
+          {selectedTags.length > 0 && (
+            <div className="flex-1 flex flex-wrap items-center gap-2 p-3 bg-blue-50 dark:bg-space-light/10 rounded-xl border border-blue-200 dark:border-space-light/20">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Aktive Tags:</span>
+              {selectedTags.map((tag, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setSelectedTags(prev => prev.filter(t => t !== tag));
+                    setCurrentPage(1);
+                  }}
+                  className="group flex items-center gap-1 px-3 py-1 text-sm font-medium bg-blue-500 dark:bg-neon-purple text-white rounded-full hover:bg-blue-600 dark:hover:bg-neon-purple/80 transition-colors"
+                >
+                  {tag}
+                  <span className="text-xs opacity-70 group-hover:opacity-100">×</span>
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  setSelectedTags([]);
+                  setCurrentPage(1);
+                }}
+                className="ml-auto text-xs font-semibold text-red-600 dark:text-red-400 hover:underline"
+              >
+                Alle entfernen
+              </button>
+            </div>
+          )}
 
           <select
             value={selectedCategory}
@@ -521,8 +560,11 @@ export function IconGallery() {
                         key={idx}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSearchTerm(tag);
-                          setCurrentPage(1);
+                          // Add tag if not already selected
+                          if (!selectedTags.includes(tag)) {
+                            setSelectedTags(prev => [...prev, tag]);
+                            setCurrentPage(1);
+                          }
                         }}
                         className="px-2 py-0.5 text-[10px] font-medium bg-blue-50 dark:bg-space-light/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-space-light/30 transition-colors"
                         title={`Suche nach "${tag}"`}
