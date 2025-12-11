@@ -5,6 +5,20 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2025-12-11
+
+### 🎉 New Features: Smart Tagging System
+- **Icon Tags**: Jedes Icon hat nun 2-5 semantische Tags für bessere Auffindbarkeit
+- **Tag-basierte Suche**: Die Suche durchsucht nun Name, Kategorie UND alle Tags
+- **Klickbare Tag-Chips**: Unter jedem Icon werden die ersten 3 Tags als anklickbare Chips angezeigt
+- **Sofortige Tag-Suche**: Klick auf einen Tag startet automatisch eine Suche nach diesem Begriff
+- **280 Icons vollständig getaggt**: Alle Icons in allen Kategorien (Food, Health, Travel, Finance, etc.) haben jetzt aussagekräftige Tags
+
+### 🔧 Technical Improvements
+- Neue Datenstruktur mit `IconData` Interface inkl. Tags
+- Optimierte Filterlogik für Multi-Kriterien-Suche
+- API Route nutzt jetzt zentrale Datendatei (`data.ts`)
+
 ## [1.5.2] - 2025-12-11
 
 ### 🐛 Bug Fixes

@@ -11,9 +11,11 @@ import { IconViewerModal } from './icon-viewer-modal';
 interface Icon {
   name: string;
   category: string;
+  tags: string[];
 }
 
 interface GalleryData {
+  icons: Icon[];
   categories: Record<string, { count: number; icons: string[] }>;
   metadata: {
     total: number;
@@ -98,21 +100,21 @@ export function IconGallery() {
   const filteredIcons = useMemo(() => {
     if (!galleryData) return [];
 
-    let icons: Icon[] = [];
+    let icons: Icon[] = galleryData.icons;
 
-    if (selectedCategory === 'all') {
-      galleryData.metadata.categories.forEach(cat => {
-        if (galleryData.categories[cat]) {
-          icons.push(...galleryData.categories[cat].icons.map(name => ({ name, category: cat })));
-        }
-      });
-    } else if (galleryData.categories[selectedCategory]) {
-      icons = galleryData.categories[selectedCategory].icons.map(name => ({ name, category: selectedCategory }));
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      icons = icons.filter(icon => icon.category === selectedCategory);
     }
 
+    // Filter by search term (searches name, category, and tags)
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      icons = icons.filter(icon => icon.name.toLowerCase().includes(term));
+      icons = icons.filter(icon =>
+        icon.name.toLowerCase().includes(term) ||
+        icon.category.toLowerCase().includes(term) ||
+        icon.tags.some(tag => tag.toLowerCase().includes(term))
+      );
     }
 
     return icons;
@@ -510,7 +512,25 @@ export function IconGallery() {
 
                 <div className={cn("text-center", viewMode === 'list' && "text-left")}>
                   <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">{icon.name}</h3>
-                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase">{icon.category}</span>
+                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase block mb-2">{icon.category}</span>
+
+                  {/* Tag Chips */}
+                  <div className="flex flex-wrap gap-1 justify-center">
+                    {icon.tags.slice(0, 3).map((tag, idx) => (
+                      <button
+                        key={idx}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSearchTerm(tag);
+                          setCurrentPage(1);
+                        }}
+                        className="px-2 py-0.5 text-[10px] font-medium bg-blue-50 dark:bg-space-light/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-space-light/30 transition-colors"
+                        title={`Suche nach "${tag}"`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
