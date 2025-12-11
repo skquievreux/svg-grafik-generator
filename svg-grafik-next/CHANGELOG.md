@@ -5,6 +5,51 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1] - 2025-12-11
+
+### 🐛 Bug Fix: Icon Viewer Modal Dark Mode
+- **Modal Background**: Jetzt dunkel im Dark Mode (`dark:bg-space-900/95`)
+- **Palette Cards**: Dunkler Hintergrund im Dark Mode
+- **Text Colors**: Besserer Kontrast für Titel und Beschreibungen
+- **Border Colors**: Angepasst für Dark Mode (`dark:border-space-light/20`)
+
+**Jetzt können Sie Icons im Dark Mode korrekt in der Vorschau sehen!**
+
+## [1.8.0] - 2025-12-11
+
+### 🎉 MAJOR: Tailwind CSS v4 Migration - ERFOLGREICH!
+
+**Das Problem war gelöst!** Nach intensivem Debugging haben wir die korrekte Tailwind v4 Konfiguration implementiert.
+
+#### ✅ Was funktioniert jetzt:
+- **Tailwind CSS v4** mit `@import "tailwindcss"` Syntax
+- **Dark Mode** via `@custom-variant dark (&:where(.dark, .dark *))`
+- **Custom Colors** via `@theme { --color-space-950: #050511; }`
+- **Custom Utilities** via `@utility glass-card { }`
+- **Alle Tailwind-Klassen** werden korrekt angewendet
+- **`dark:` Varianten** funktionieren perfekt
+
+#### 🔧 Technische Änderungen:
+- **globals.css**: Komplett neu strukturiert mit v4-Syntax
+  - `@custom-variant dark` für Dark Mode Support
+  - `@theme` für Custom Colors (space-*, neon-*, etc.)
+  - `@utility` für Custom Utilities (glass-card)
+- **postcss.config.mjs**: Verwendet `@tailwindcss/postcss` Plugin
+- **tailwind.config.ts**: `darkMode` Option entfernt (wird via CSS gesteuert)
+- **package.json**: Tailwind v4.1.17 + @tailwindcss/postcss v4.1.17
+
+#### 📚 Dokumentation:
+- `TAILWIND_PROBLEM_ANALYSIS.md`: Vollständige Problem-Analyse
+- `TAILWIND_DEBUG.md`: Debug-Guide für zukünftige Probleme
+
+#### 🚀 Nächste Schritte:
+- Icon Gallery auf Dark Mode umstellen
+- Test-Seiten entfernen
+- Production Build testen
+
+**Warum es vorher nicht funktionierte:**
+Tailwind v4 hat eine komplett neue CSS-first Konfiguration. Die `dark:` Varianten benötigen `@custom-variant dark` in der CSS-Datei, nicht mehr `darkMode: ["class"]` in der Config!
+
 ## [1.7.2] - 2025-12-11
 
 ### 🐛 Critical Fix: Dark Mode Hydration
