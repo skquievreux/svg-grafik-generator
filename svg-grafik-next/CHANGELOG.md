@@ -5,6 +5,21 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2025-12-11
+
+### 🎨 Feature: Automatische Icon-Farbanpassung
+- **Theme-Detection**: Icons erkennen automatisch Dark/Light Mode
+- **Auto Background**: 
+  - Light Mode: Weißer Hintergrund (#FFFFFF)
+  - Dark Mode: Schwarzer Hintergrund (#000000)
+- **Auto Icon Color**:
+  - Light Mode: Schwarze Icons (#000000)
+  - Dark Mode: Weiße Icons (#FFFFFF)
+- **MutationObserver**: Reagiert sofort auf Theme-Wechsel
+- **Custom Colors**: Manuelle Farben überschreiben Auto-Anpassung
+
+**Jetzt sind Icons in beiden Modi perfekt sichtbar!**
+
 ## [1.8.1] - 2025-12-11
 
 ### 🐛 Bug Fix: Icon Viewer Modal Dark Mode
