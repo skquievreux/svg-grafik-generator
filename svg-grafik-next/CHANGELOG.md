@@ -5,6 +5,20 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2025-12-11
+
+### 🎉 Feature: Footer & Hydration Fix
+- **Footer Component**: Professioneller Footer mit Developer Credit und Copyright
+  - Link zu Quievreux Consulting (mailto)
+  - Copyright © 2025 SVG Galerie
+  - Dark Mode Support
+- **Hydration Warning Fix**: `suppressHydrationWarning` auf `<body>` Element
+  - Behebt Browser-Extension-Konflikte (z.B. cz-shortcut-listen)
+- **Layout Verbesserung**: Flexbox-Layout für sticky Footer
+  - `min-h-screen` auf body
+  - `flex-1` auf main content
+  - Footer bleibt am unteren Rand
+
 ## [1.8.2] - 2025-12-11
 
 ### 🎨 Feature: Automatische Icon-Farbanpassung
