@@ -5,48 +5,55 @@
 @layer base {
   :root {
     /* Base Variables - Adjusted for Cosmic Theme dark mode by default mainly */
-    --background: 240 10% 3.9%; /* space-950 */
+    --background: 240 10% 3.9%;
+    /* space-950 */
     --foreground: 0 0% 98%;
 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
- 
+
     --popover: 240 10% 4%;
     --popover-foreground: 0 0% 98%;
- 
-    --primary: 48 96% 51%; /* Gold */
+
+    --primary: 48 96% 51%;
+    /* Gold */
     --primary-foreground: 240 5.9% 10%;
- 
+
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
- 
+
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
- 
+
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
- 
+
     --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%; /* dark grey */
+    --input: 240 3.7% 15.9%;
+    /* dark grey */
     --ring: 240 4.9% 83.9%;
- 
+
     --radius: 0.75rem;
 
     /* Fonts */
-    --font-sans: 'Inter', sans-serif; 
+    --font-sans: 'Inter', sans-serif;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
+
   body {
-    @apply bg-[#050511] text-white overflow-x-hidden min-h-screen selection:bg-neon-purple/30 selection:text-white;
-    background-image: 
+    background-color: #050511;
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-image:
       radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
     background-attachment: fixed;
@@ -58,23 +65,18 @@
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.02);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
-}
-
-/* Utility classes for text gradients */
-.text-gradient-gold {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-neon-gold to-orange-400;
-}
-.text-gradient-purple {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-neon-purple to-blue-500;
 }
 
 /* Confetti Particle Animation (kept or improved) */
