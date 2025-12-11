@@ -5,6 +5,15 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-12-11
+
+### 🎉 Major Update: Cosmic UI & Dark Mode
+- **Cosmic Theme Engine**: Vollständige Implementierung des Dark Mode mit "Space"-Ästhetik.
+- **Contrast Fixes**: Optimierte Lesbarkeit für Dropdowns und Inputs in beiden Modi.
+- **Color Palette Features**: "Copy Palette" Button hinzugefügt zum direkten Kopieren der JSON-Konfiguration.
+- **Performance**: Pagination auf 24 Items pro Seite optimiert.
+- **UI Architecture**: Refactoring der `IconGallery` Komponente für bessere Wartbarkeit und Theme-Support.
+
 ## [1.1.1] - 2025-12-11
 
 ### 🎉 Added (Hinzugefügt)

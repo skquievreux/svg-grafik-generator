@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { DynamicIcon } from '@/components/icons/dynamic-icon';
 import { Button } from '@/components/ui/button';
 import { cn, formatCategoryName, copyToClipboard, downloadSVG } from '@/lib/utils';
-import { Search, Grid, List, Download, Copy, Heart, Palette, RotateCcw } from 'lucide-react';
+import { Search, Grid, List, Download, Copy, Heart, Palette, RotateCcw, Sun, Moon, ChevronLeft, ChevronRight } from 'lucide-react';
+
 import { IconViewerModal } from './icon-viewer-modal';
 
 interface Icon {
@@ -26,9 +27,19 @@ export function IconGallery() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(60);
+  const [itemsPerPage] = useState(24);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
+  // Theme Effect
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Custom Colors State
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -77,67 +88,43 @@ export function IconGallery() {
     }
   }, []);
 
-  // Load persisted theme
-  useEffect(() => {
-    const savedTheme = sessionStorage.getItem('svg-icon-theme');
-    if (savedTheme) {
-      try {
-        setCustomColors(JSON.parse(savedTheme));
-      } catch (e) {
-        console.error("Failed to load theme", e);
-      }
-    }
-  }, []);
-
-  const handleApplyPalette = (colors: { background: string; border: string; icon: string }) => {
-    const newColors = {
-      bgColor: colors.background,
-      borderColor: colors.border,
-      iconColor: colors.icon
-    };
-    setCustomColors(newColors);
-    sessionStorage.setItem('svg-icon-theme', JSON.stringify(newColors));
-  };
-
-  const openViewer = (icon: Icon) => {
-    setViewerState({
-      isOpen: true,
-      iconName: icon.name,
-      category: icon.category
-    });
-  };
-
+  // Filter Logic
   const filteredIcons = useMemo(() => {
     if (!galleryData) return [];
+
     let icons: Icon[] = [];
 
-    // Flatten all icons
-    Object.entries(galleryData.categories).forEach(([cat, data]) => {
-      data.icons.forEach(name => {
-        icons.push({ name, category: cat });
+    if (selectedCategory === 'all') {
+      galleryData.metadata.categories.forEach(cat => {
+        if (galleryData.categories[cat]) {
+          icons.push(...galleryData.categories[cat].icons.map(name => ({ name, category: cat })));
+        }
       });
-    });
+    } else if (galleryData.categories[selectedCategory]) {
+      icons = galleryData.categories[selectedCategory].icons.map(name => ({ name, category: selectedCategory }));
+    }
 
-    return icons.filter(icon => {
-      const matchesSearch = icon.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || icon.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [galleryData, searchTerm, selectedCategory]);
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      icons = icons.filter(icon => icon.name.toLowerCase().includes(term));
+    }
 
+    return icons;
+  }, [galleryData, selectedCategory, searchTerm]);
+
+  // Pagination Logic
   const totalPages = Math.ceil(filteredIcons.length / itemsPerPage);
-
   const paginatedIcons = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredIcons.slice(start, start + itemsPerPage);
   }, [filteredIcons, currentPage, itemsPerPage]);
 
-  const toggleFavorite = (name: string) => {
+  const toggleFavorite = (iconName: string) => {
     const newFavorites = new Set(favorites);
-    if (newFavorites.has(name)) {
-      newFavorites.delete(name);
+    if (newFavorites.has(iconName)) {
+      newFavorites.delete(iconName);
     } else {
-      newFavorites.add(name);
+      newFavorites.add(iconName);
     }
     setFavorites(newFavorites);
     localStorage.setItem('favorites', JSON.stringify(Array.from(newFavorites)));
@@ -146,7 +133,7 @@ export function IconGallery() {
   const getIconSearchParams = (icon: Icon) => {
     const params = new URLSearchParams({
       name: icon.name,
-      category: icon.category,
+      category: icon.category
     });
 
     if (customColors.bgColor) params.append('bgColor', customColors.bgColor);
@@ -165,7 +152,6 @@ export function IconGallery() {
       piece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
       piece.style.transform = `rotate(${Math.random() * 360}deg)`;
 
-      // Random spread
       const spreadX = (Math.random() - 0.5) * 200;
       const spreadY = (Math.random() - 1) * 200;
       piece.animate([
@@ -188,7 +174,6 @@ export function IconGallery() {
       const svgCode = await response.text();
       await copyToClipboard(svgCode);
 
-      // Visual feedback - simple for now
       const btn = e.currentTarget as HTMLButtonElement;
       const originalInner = btn.innerHTML;
       btn.innerHTML = '<span class="text-green-600 font-bold">✓</span>';
@@ -214,6 +199,50 @@ export function IconGallery() {
     }
   };
 
+  const copyPaletteConfig = async () => {
+    const config = JSON.stringify(customColors, null, 2);
+    await copyToClipboard(config);
+  };
+
+  // Viewer Modal Handlers
+  const openViewer = (icon: Icon) => {
+    setViewerState({
+      isOpen: true,
+      iconName: icon.name,
+      category: icon.category
+    });
+  };
+
+  const closeViewer = () => {
+    setViewerState(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const handleApplyPalette = (colors: { background: string; border: string; icon: string }) => {
+    setCustomColors({
+      bgColor: colors.background,
+      borderColor: colors.border,
+      iconColor: colors.icon
+    });
+    // Save to session storage
+    sessionStorage.setItem('svg-icon-theme', JSON.stringify(colors));
+  };
+
+  // Load persisted theme
+  useEffect(() => {
+    const savedTheme = sessionStorage.getItem('svg-icon-theme');
+    if (savedTheme) {
+      try {
+        const colors = JSON.parse(savedTheme);
+        setCustomColors({
+          bgColor: colors.background,
+          borderColor: colors.border,
+          iconColor: colors.icon
+        });
+      } catch (e) { console.error(e) }
+    }
+  }, []);
+
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -232,7 +261,7 @@ export function IconGallery() {
 
   return (
     <div className="space-y-8 animate-pop-in">
-      {/* Control Panel - Glassmorphism */}
+      {/* Control Panel */}
       <div className="glass-card rounded-2xl p-6 md:p-8 mb-8 sticky top-24 z-40 transition-all duration-300">
         <div className="flex flex-col xl:flex-row gap-6 mb-6">
           <div className="flex-1 relative group">
@@ -245,7 +274,7 @@ export function IconGallery() {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
+              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
             />
           </div>
 
@@ -255,11 +284,11 @@ export function IconGallery() {
               setSelectedCategory(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-6 py-4 text-base md:text-lg bg-white/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer"
+            className="px-6 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none"
           >
-            <option value="all">Alle Kategorien ({galleryData.metadata.total})</option>
+            <option value="all" className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">Alle Kategorien ({galleryData.metadata.total})</option>
             {galleryData.metadata.categories.map(category => (
-              <option key={category} value={category}>
+              <option key={category} value={category} className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">
                 {formatCategoryName(category)} ({galleryData.categories[category]?.count || 0})
               </option>
             ))}
@@ -276,12 +305,12 @@ export function IconGallery() {
               <Palette className="h-5 w-5 mr-0 md:mr-2" />
               <span className="hidden md:inline">Anpassen</span>
             </Button>
-            <div className="bg-gray-100/50 p-1 rounded-xl flex border border-gray-200">
+            <div className="bg-gray-100/50 dark:bg-space-light/20 p-1 rounded-xl flex border border-gray-200 dark:border-space-800">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setViewMode('grid')}
-                className={cn("rounded-lg h-full px-4", viewMode === 'grid' && "shadow-sm bg-white")}
+                className={cn("rounded-lg h-full px-4", viewMode === 'grid' && "shadow-sm bg-white dark:bg-space-800")}
                 title="Raster"
               >
                 <Grid className="h-5 w-5" />
@@ -290,19 +319,29 @@ export function IconGallery() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setViewMode('list')}
-                className={cn("rounded-lg h-full px-4", viewMode === 'list' && "shadow-sm bg-white")}
+                className={cn("rounded-lg h-full px-4", viewMode === 'list' && "shadow-sm bg-white dark:bg-space-800")}
                 title="Liste"
               >
                 <List className="h-5 w-5" />
               </Button>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-12 h-12 rounded-xl dark:border-space-800 dark:bg-space-900 dark:text-yellow-400"
+              title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
           </div>
         </div>
 
-        {/* Color Picker Panel - Animate Slide */}
+        {/* Color Picker Panel */}
         {showColorPicker && (
-          <div className="mt-6 p-6 bg-white/60 rounded-xl border border-blue-100 animate-pop-in">
+          <div className="mt-6 p-6 bg-white/60 dark:bg-space-900 rounded-xl border border-blue-100 dark:border-space-800 animate-pop-in">
             <div className="flex flex-wrap gap-8 items-end">
+              {/* Background Color */}
               <div>
                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Hintergrund</label>
                 <div className="flex items-center gap-3">
@@ -315,10 +354,11 @@ export function IconGallery() {
                     />
                     <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.bgColor || '#000000' }}></div>
                   </div>
-                  <span className="text-sm font-mono text-gray-600 bg-white px-2 py-1 rounded border border-gray-200">{customColors.bgColor || 'Standard'}</span>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.bgColor || 'Standard'}</span>
                 </div>
               </div>
 
+              {/* Border Color */}
               <div>
                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Rahmen</label>
                 <div className="flex items-center gap-3">
@@ -331,10 +371,11 @@ export function IconGallery() {
                     />
                     <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.borderColor || '#000000' }}></div>
                   </div>
-                  <span className="text-sm font-mono text-gray-600 bg-white px-2 py-1 rounded border border-gray-200">{customColors.borderColor || 'Standard'}</span>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.borderColor || 'Standard'}</span>
                 </div>
               </div>
 
+              {/* Icon Color */}
               <div>
                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Icon</label>
                 <div className="flex items-center gap-3">
@@ -347,27 +388,34 @@ export function IconGallery() {
                     />
                     <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.iconColor || '#000000' }}></div>
                   </div>
-                  <span className="text-sm font-mono text-gray-600 bg-white px-2 py-1 rounded border border-gray-200">{customColors.iconColor || 'Standard'}</span>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.iconColor || 'Standard'}</span>
                 </div>
               </div>
 
-              <div className="ml-auto">
-                <Button
-                  variant="ghost"
-                  onClick={() => setCustomColors({ bgColor: '', borderColor: '', iconColor: '' })}
-                  className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600 text-gray-500"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  Zurücksetzen
+              <div className="flex-1 flex justify-end">
+                <Button variant="outline" onClick={copyPaletteConfig} className="gap-2 dark:border-space-800 dark:bg-space-900 dark:text-gray-200">
+                  <Copy className="h-4 w-4" />
+                  Palette Kopieren
                 </Button>
               </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <Button
+                variant="ghost"
+                onClick={() => setCustomColors({ bgColor: '', borderColor: '', iconColor: '' })}
+                className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600 text-gray-500"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Zurücksetzen
+              </Button>
             </div>
           </div>
         )}
 
         {/* Stats Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-100 gap-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-100 dark:border-space-800 gap-4">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <span className="font-semibold">{filteredIcons.length}</span> Icons gefunden
           </div>
@@ -401,82 +449,62 @@ export function IconGallery() {
             >
               <div
                 className={cn(
-                  'card-3d group bg-white rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300 cursor-pointer',
-                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200',
-                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200'
+                  'card-3d group bg-white dark:bg-space-800 dark:border-space-700 rounded-2xl border border-gray-100 relative overflow-hidden transition-all duration-300 cursor-pointer',
+                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-200 dark:hover:border-neon-purple',
+                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-200 dark:hover:border-neon-purple'
                 )}
                 onClick={() => openViewer(icon)}
               >
-                {/* Hover Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/30 group-hover:to-purple-50/30 transition-all duration-500 pointer-events-none" />
-
-                <div className={cn(
-                  'relative z-10 transition-transform duration-300 group-hover:scale-110',
-                  viewMode === 'grid' && 'mb-6',
-                  viewMode === 'list' && 'flex-shrink-0'
-                )}>
-                  <div className="relative inline-block drop-shadow-sm group-hover:drop-shadow-lg transition-all duration-300">
-                    <DynamicIcon
-                      name={icon.name}
-                      category={icon.category}
-                      size={viewMode === 'grid' ? 72 : 48}
-                      bgColor={customColors.bgColor}
-                      borderColor={customColors.borderColor}
-                      iconColor={customColors.iconColor}
-                    />
-                    {favorites.has(icon.name) && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg animate-pop-in">
-                        <Heart className="h-3 w-3 fill-current" />
-                      </div>
-                    )}
-                  </div>
+                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(icon.name);
+                    }}
+                    className="p-2 hover:bg-red-50 rounded-full transition-colors"
+                  >
+                    <Heart className={cn("h-4 w-4", favorites.has(icon.name) ? "fill-red-500 text-red-500" : "text-gray-400")} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyIconCode(icon, e);
+                    }}
+                    className="p-2 hover:bg-blue-50 rounded-full transition-colors bg-white/80 dark:bg-space-900/80 shadow-sm"
+                    title="Code kopieren"
+                  >
+                    <Copy className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadIcon(icon, e);
+                    }}
+                    className="p-2 hover:bg-blue-50 rounded-full transition-colors bg-white/80 dark:bg-space-900/80 shadow-sm"
+                    title="Download SVG"
+                  >
+                    <Download className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                  </button>
                 </div>
 
                 <div className={cn(
-                  'relative z-10 text-center w-full',
-                  viewMode === 'list' && 'flex-1 text-left'
+                  "relative transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3",
+                  viewMode === 'grid' ? "mb-6" : ""
                 )}>
-                  <h3 className="font-bold text-gray-800 mb-1 text-lg leading-tight group-hover:text-blue-600 transition-colors">{icon.name}</h3>
-                  <div className="text-xs font-medium text-gray-400 mb-4 uppercase tracking-wider">
-                    {formatCategoryName(icon.category)}
-                  </div>
+                  <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <DynamicIcon
+                    name={icon.name}
+                    category={icon.category}
+                    size={viewMode === 'grid' ? 64 : 48}
+                    bgColor={customColors.bgColor}
+                    borderColor={customColors.borderColor}
+                    iconColor={customColors.iconColor}
+                  />
+                </div>
 
-                  {/* Actions - Prevent propagation to not trigger viewer when action clicked */}
-                  <div className={cn(
-                    "flex gap-2 transition-all duration-300",
-                    viewMode === 'grid' ? "justify-center opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" : "opacity-100"
-                  )} onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => copyIconCode(icon, e)}
-                      title="Kopieren"
-                      className="h-8 w-8 p-0 rounded-full hover:bg-blue-100 hover:text-blue-600"
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => downloadIcon(icon, e)}
-                      title="Download"
-                      className="h-8 w-8 p-0 rounded-full hover:bg-green-100 hover:text-green-600"
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleFavorite(icon.name)}
-                      title="Favorit"
-                      className={cn(
-                        "h-8 w-8 p-0 rounded-full hover:bg-red-100 hover:text-red-600",
-                        favorites.has(icon.name) && "text-red-500 bg-red-50"
-                      )}
-                    >
-                      <Heart className={cn("h-4 w-4", favorites.has(icon.name) && "fill-current")} />
-                    </Button>
-                  </div>
+                <div className={cn("text-center", viewMode === 'list' && "text-left")}>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">{icon.name}</h3>
+                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase">{icon.category}</span>
                 </div>
               </div>
             </div>
@@ -484,37 +512,37 @@ export function IconGallery() {
         })}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 mt-12 pb-12">
+        <div className="flex justify-center items-center gap-4 py-8">
           <Button
             variant="outline"
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="rounded-full px-6 hover:bg-white hover:text-blue-600 hover:border-blue-200 transition-all font-medium"
+            className="dark:bg-space-900 dark:border-space-800 dark:text-gray-100"
           >
-            ←
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Zurück
           </Button>
-
-          <span className="text-sm font-medium text-gray-500 bg-white/80 px-4 py-2 rounded-full shadow-sm backdrop-blur-sm border border-gray-100">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
             Seite {currentPage} von {totalPages}
           </span>
-
           <Button
             variant="outline"
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="rounded-full px-6 hover:bg-white hover:text-blue-600 hover:border-blue-200 transition-all font-medium"
+            className="dark:bg-space-900 dark:border-space-800 dark:text-gray-100"
           >
-            →
+            Weiter
+            <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         </div>
       )}
 
-      {/* Modal */}
+      {/* Viewer Modal */}
       <IconViewerModal
         isOpen={viewerState.isOpen}
-        onClose={() => setViewerState(prev => ({ ...prev, isOpen: false }))}
+        onClose={closeViewer}
         iconName={viewerState.iconName}
         category={viewerState.category}
         onApplyPalette={handleApplyPalette}
