@@ -52,7 +52,7 @@ export function IconViewerModal({ isOpen, onClose, iconName, category, onApplyPa
                         <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                             Smart Design: {iconName}
                         </DialogTitle>
-                        <Button variant="ghost" size="icon" onClick={regeneratePalettes} title="Neue Vorschläge generieren">
+                        <Button variant="ghost" size="sm" onClick={regeneratePalettes} title="Neue Vorschläge generieren" className="h-8 w-8 p-0 rounded-full">
                             <Wand2 className="h-5 w-5 text-purple-500 hover:rotate-12 transition-transform" />
                         </Button>
                     </div>
