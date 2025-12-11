@@ -34,10 +34,16 @@ export function IconGallery() {
 
   // Theme Effect
   useEffect(() => {
+    console.log('Testing Theme Toggle. Current state:', theme); // Debug Log
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      console.log('Applied DARK class to HTML element');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.add('light'); // Explicitly add light for strict CSS frameworks
+      console.log('Applied LIGHT class to HTML element');
     }
   }, [theme]);
 
@@ -284,7 +290,7 @@ export function IconGallery() {
               setSelectedCategory(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-6 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 border border-gray-200 dark:border-space-800 dark:text-gray-100 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none"
+            className="px-6 py-4 text-base md:text-lg bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none shadow-sm"
           >
             <option value="all" className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">Alle Kategorien ({galleryData.metadata.total})</option>
             {galleryData.metadata.categories.map(category => (
