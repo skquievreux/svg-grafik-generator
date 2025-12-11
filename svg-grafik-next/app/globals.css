@@ -4,16 +4,54 @@
 
 @layer base {
   :root {
-    /* Base Variables - Adjusted for Cosmic Theme dark mode by default mainly */
-    --background: 240 10% 3.9%;
-    /* space-950 */
-    --foreground: 0 0% 98%;
+    /* LIGHT MODE (Default) */
+    --background: 0 0% 93%;
+    /* #edeff2 - Light gray optimized for dashboards */
+    --foreground: 222 47% 11%;
+    /* Dark blue/gray text */
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 221 83% 53%;
+    /* Blue 600 */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.75rem;
+    --font-sans: 'Inter', sans-serif;
+  }
+
+  .dark {
+    /* DARK MODE (Cosmic) */
+    --background: 240 10% 4%;
+    /* #050511 Deep Space */
+    --foreground: 210 40% 98%;
+
+    --card: 240 10% 7%;
+    /* Space 900 like */
+    --card-foreground: 210 40% 98%;
 
     --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 48 96% 51%;
     /* Gold */
@@ -33,13 +71,7 @@
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    /* dark grey */
     --ring: 240 4.9% 83.9%;
-
-    --radius: 0.75rem;
-
-    /* Fonts */
-    --font-sans: 'Inter', sans-serif;
   }
 }
 
@@ -49,10 +81,15 @@
   }
 
   body {
-    background-color: #050511;
-    color: white;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     overflow-x: hidden;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Only apply cosmic gradients in dark mode */
+  .dark body {
     background-image:
       radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);

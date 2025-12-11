@@ -5,6 +5,12 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2025-12-11
+
+### 🐛 Bug Fixes
+- **Dark Mode Implementation**: Fixed CSS variables architecture to properly support light/dark toggling. Global styles now correctly utilize CSS variables for background and foreground colors instead of hardcoded values.
+- **Theme Transitions**: Added smooth transitions for background and color changes.
+
 ## [1.5.0] - 2025-12-11
 
 ### 🎉 Major Update: Cosmic UI & Dark Mode
