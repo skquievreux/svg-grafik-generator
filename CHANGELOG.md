@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.4...v1.4.0) (2025-12-11)
+
+
+### Features
+
+* implement 3-column grid layout and replace duplicate icons with unique paths (science, travel, finance) ([bdad4de](https://github.com/skquievreux/svg-grafik-generator/commit/bdad4dedaf60c5fc237e3071cd3a444e8b2b737f))
+
 ## [1.3.4](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.3...v1.3.4) (2025-12-10)
 
 
