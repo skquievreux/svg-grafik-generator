@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.4.0...v1.5.0) (2025-12-11)
+
+
+### Bug Fixes
+
+* build errors in icon-gallery and button size prop ([28a7626](https://github.com/skquievreux/svg-grafik-generator/commit/28a76261360295c6169a9fb69cf6323c9a3a924e))
+* resolve tailwind postcss configuration and remove broken [@apply](https://github.com/apply) rules ([cab4798](https://github.com/skquievreux/svg-grafik-generator/commit/cab4798fbfcf3a60952eb382bae448388e326f4f))
+
+
+### Features
+
+* complete tailwind config overhaul for Cosmic Glass theme ([43e08e2](https://github.com/skquievreux/svg-grafik-generator/commit/43e08e2908221b77735f74d3406beb46381e2da8))
+* massive icon system upgrade with 80+ new svgs and comprehensive mapping ([acf9625](https://github.com/skquievreux/svg-grafik-generator/commit/acf9625128f5b6d9d9fe1c7f8c69ae1bc8c70fae))
+* smart palette system with harmony engine and interactive viewer ([1ce8cf1](https://github.com/skquievreux/svg-grafik-generator/commit/1ce8cf14bbd51c70a213d38544c8f2c197570385))
+
 # [1.4.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.4...v1.4.0) (2025-12-11)
 
 
