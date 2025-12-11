@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.5.0...v1.6.0) (2025-12-11)
+
+
+### Features
+
+* **v1.5.0:** implement dark mode, copy palette, and fix dropdown UI ([fb5cc37](https://github.com/skquievreux/svg-grafik-generator/commit/fb5cc3711206ff178c376737309047e106bd4a01))
+
 # [1.5.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.4.0...v1.5.0) (2025-12-11)
 
 
