@@ -1,83 +1,94 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* ============================================
+   Dark Mode Custom Variant (CRITICAL!)
+   ============================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
+   Theme Variablen (ersetzt tailwind.config.js)
+   ============================================ */
+@theme {
+  /* Custom Colors - Space Theme */
+  --color-space-950: #050511;
+  --color-space-900: #0a0b1e;
+  --color-space-800: #141428;
+  --color-space-light: #2a2b4a;
+
+  /* Neon Accents */
+  --color-neon-gold: #FFD700;
+  --color-neon-purple: #BD00FF;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-pink: #FF0055;
+
+  /* Primary Colors */
+  --color-primary: #D4B55C;
+  --color-secondary: #2C3E50;
+
+  /* Functional Colors */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+}
+
+/* ============================================
+   Base Layer für CSS Variablen
+   ============================================ */
 @layer base {
   :root {
-    /* LIGHT MODE (Default) */
+    /* Light Mode Variablen */
     --background: 0 0% 93%;
-    /* #edeff2 - Light gray optimized for dashboards */
     --foreground: 222 47% 11%;
-    /* Dark blue/gray text */
-
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-
     --primary: 221 83% 53%;
-    /* Blue 600 */
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222 47% 11%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215 16% 47%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222 47% 11%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 221 83% 53%;
-
     --radius: 0.75rem;
-    --font-sans: 'Inter', sans-serif;
   }
 
   .dark {
-    /* DARK MODE (Cosmic) */
+    /* Dark Mode Variablen */
     --background: 240 10% 4%;
-    /* #050511 Deep Space */
     --foreground: 210 40% 98%;
-
     --card: 240 10% 7%;
-    /* Space 900 like */
     --card-foreground: 210 40% 98%;
-
     --popover: 240 10% 4%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 48 96% 51%;
-    /* Gold */
     --primary-foreground: 240 5.9% 10%;
-
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
-}
 
-@layer base {
   * {
     border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -88,7 +99,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Only apply cosmic gradients in dark mode */
+  /* Cosmic gradients only in dark mode */
   .dark body {
     background-image:
       radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 40%),
@@ -97,7 +108,9 @@
   }
 }
 
-/* Custom Scrollbar */
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -116,19 +129,10 @@
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* Confetti Particle Animation */
-.confetti-piece {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background-color: #ffd700;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* Glass Card Utility for Light/Dark Mode */
-.glass-card {
+/* ============================================
+   Custom Utilities
+   ============================================ */
+@utility glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 0, 0, 0.1);
