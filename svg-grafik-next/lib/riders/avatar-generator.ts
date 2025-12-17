@@ -315,8 +315,8 @@ export class RiderAvatarGenerator {
     return {
       riderName,
       level,
-      backgroundShape: shapes[Math.floor(Math.random() * shapes.length)],
-      helmetStyle: availableHelmets[Math.floor(Math.random() * availableHelmets.length)],
+      backgroundShape: shapes[Math.floor(Math.random() * shapes.length)] ?? 'circle',
+      helmetStyle: availableHelmets[Math.floor(Math.random() * availableHelmets.length)] ?? 'fullface_basic',
       glassesStyle:
         Math.random() > 0.5
           ? (['sporty_basic', 'goggles_mx', 'aviator_cool', 'visor_futuristic'][
@@ -329,7 +329,7 @@ export class RiderAvatarGenerator {
               Math.floor(Math.random() * 3)
             ] as keyof typeof BEARD_LIBRARY)
           : undefined,
-      colorScheme: schemes[Math.floor(Math.random() * schemes.length)],
+      colorScheme: schemes[Math.floor(Math.random() * schemes.length)] ?? 'primary',
       size: 256,
       showLevel: true,
     };

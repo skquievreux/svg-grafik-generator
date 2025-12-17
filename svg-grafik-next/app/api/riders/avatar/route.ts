@@ -57,7 +57,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    config = { ...presets[presetIndex], size, showLevel, animated };
+    const selectedPreset = presets[presetIndex];
+    if (!selectedPreset) {
+      return NextResponse.json({ error: 'Preset nicht gefunden' }, { status: 500 });
+    }
+
+    config = {
+      ...selectedPreset,
+      riderName: name,
+      level: level,
+      size,
+      showLevel,
+      animated,
+    };
   } else if (randomParam) {
     // Zufälligen Avatar generieren
     config = RiderAvatarGenerator.getRandomConfig(level, name);
