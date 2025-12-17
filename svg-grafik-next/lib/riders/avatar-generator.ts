@@ -276,13 +276,18 @@ export class RiderAvatarGenerator {
     `
       : '';
 
+    // Skalierungsfaktor: Helm-Bibliothek ist für ~24x24 designed, Avatar ist 'size' groß
+    const helmetScale = size / 24 * 0.7; // 0.7 für etwas Padding
+    const helmetOriginX = 12; // Mitte der Helm-Koordinaten
+    const helmetOriginY = 12;
+
     return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
   ${defs}
   ${animation}
   <g id="rider-avatar" filter="url(#shadow)">
     ${background}
-    <g transform="translate(${center}, ${center}) scale(0.8) translate(-${center}, -${center})">
+    <g transform="translate(${center}, ${center}) scale(${helmetScale}) translate(-${helmetOriginX}, -${helmetOriginY})">
       ${helmet}
       ${glasses}
       ${beard}
