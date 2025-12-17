@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.8.1...v1.9.0) (2025-12-17)
+
+
+### Bug Fixes
+
+* correct avatar scaling to make helmets visible ([690bfce](https://github.com/skquievreux/svg-grafik-generator/commit/690bfcec93c0a62547ec01cab5312f9ab3ea7bc7))
+
+
+### Features
+
+* implement complete icon system with 100% Lucide coverage ([9e8ddc1](https://github.com/skquievreux/svg-grafik-generator/commit/9e8ddc154a24462694e765bb0fe5a44d5b354ecd))
+
 ## [1.8.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.8.0...v1.8.1) (2025-12-17)
 
 
