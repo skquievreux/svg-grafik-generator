@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.8.0...v1.8.1) (2025-12-17)
+
+
+### Bug Fixes
+
+* resolve merge conflict in package.json ([9631af3](https://github.com/skquievreux/svg-grafik-generator/commit/9631af3e524e8512d94b3cedace6aa19d54601c0))
+
 # [1.8.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.7.0...v1.8.0) (2025-12-17)
 
 
