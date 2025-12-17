@@ -200,3 +200,6 @@ pids
 
 # DynamoDB Local files
 .dynamodb
+
+# Generated reports
+reports/
