@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.7.0...v1.8.0) (2025-12-17)
+
+
+### Bug Fixes
+
+* TypeScript compilation errors for Rider-Avatar-Generator ([cb368c8](https://github.com/skquievreux/svg-grafik-generator/commit/cb368c8ff60dc37e7690e5f6e3512e9dd5146e74))
+
+
+### Features
+
+* Rider-Avatar-Generator für Bikepark Okarben v1.0.0 ([732a888](https://github.com/skquievreux/svg-grafik-generator/commit/732a888d5619c343a76046cac540b11ee4e13b40))
+
 # [1.7.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.6.0...v1.7.0) (2025-12-11)
 
 
