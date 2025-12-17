@@ -1,7 +1,6 @@
 {
     "branches": [
-        "main",
-        "chore/*"
+        "main"
     ],
     "plugins": [
         "@semantic-release/commit-analyzer",

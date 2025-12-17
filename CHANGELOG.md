@@ -1,9 +1,142 @@
+# [1.8.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.7.0...v1.8.0) (2025-12-17)
+
+
+### Bug Fixes
+
+* TypeScript compilation errors for Rider-Avatar-Generator ([cb368c8](https://github.com/skquievreux/svg-grafik-generator/commit/cb368c8ff60dc37e7690e5f6e3512e9dd5146e74))
+
+
+### Features
+
+* Rider-Avatar-Generator für Bikepark Okarben v1.0.0 ([732a888](https://github.com/skquievreux/svg-grafik-generator/commit/732a888d5619c343a76046cac540b11ee4e13b40))
+
+# [1.7.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.6.0...v1.7.0) (2025-12-11)
+
+
+### Bug Fixes
+
+* styling contrast issues and added social sharing concept ([1a7b4cf](https://github.com/skquievreux/svg-grafik-generator/commit/1a7b4cf7f7ca4db6137c15b10b67b020be143163))
+* **theme:** correct css variables and body styles for light/dark mode toggle ([c604bd0](https://github.com/skquievreux/svg-grafik-generator/commit/c604bd0aad164e944ef7b6d19070ada4018e847a))
+* **ui:** enforce dark text color on search input in light mode ([37a1ec1](https://github.com/skquievreux/svg-grafik-generator/commit/37a1ec1f050975a5f1eb42fb176334ecb86adb8c))
+* **v1.7.1:** improve dark mode contrast with deeper backgrounds and auto icon colors ([5adf2b3](https://github.com/skquievreux/svg-grafik-generator/commit/5adf2b3970935e21affd3349734ae729c5f3ff68))
+* **v1.7.2:** resolve hydration mismatch with blocking theme script ([5e56dfb](https://github.com/skquievreux/svg-grafik-generator/commit/5e56dfb5b86b38779663f89bfdcdfeda96dff974))
+* **v1.8.0:** implement Tailwind v4 with [@custom-variant](https://github.com/custom-variant) dark mode - WORKING! ([9f081d4](https://github.com/skquievreux/svg-grafik-generator/commit/9f081d4ce7386dcfa7c0468a235057ff4595e45e))
+* **v1.8.1:** add dark mode support to icon viewer modal ([6db87c8](https://github.com/skquievreux/svg-grafik-generator/commit/6db87c8ad76c395b47bc4959d8791a97cc596fba))
+
+
+### Features
+
+* **v1.6.0:** implement smart tagging system with clickable tag chips and enhanced search ([d7ea200](https://github.com/skquievreux/svg-grafik-generator/commit/d7ea2002ded424c12acf3fb9f16b8c4416cb7d65))
+* **v1.7.0:** multi-tag search with OR logic and complete dark mode support ([ee4fc86](https://github.com/skquievreux/svg-grafik-generator/commit/ee4fc86f54596d00102f498bb42d345cda3a84fb))
+* **v1.8.2:** auto-adjust icon colors based on dark/light mode ([db2a719](https://github.com/skquievreux/svg-grafik-generator/commit/db2a719a452c1d75618d2738e03be12fbcc0911f))
+* **v1.9.0:** add footer with developer credit and fix hydration warning ([5eac6ad](https://github.com/skquievreux/svg-grafik-generator/commit/5eac6add39a8aa0945361d5ad4143411e710af65))
+
+# [1.6.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.5.0...v1.6.0) (2025-12-11)
+
+
+### Features
+
+* **v1.5.0:** implement dark mode, copy palette, and fix dropdown UI ([fb5cc37](https://github.com/skquievreux/svg-grafik-generator/commit/fb5cc3711206ff178c376737309047e106bd4a01))
+
+# [1.5.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.4.0...v1.5.0) (2025-12-11)
+
+
+### Bug Fixes
+
+* build errors in icon-gallery and button size prop ([28a7626](https://github.com/skquievreux/svg-grafik-generator/commit/28a76261360295c6169a9fb69cf6323c9a3a924e))
+* resolve tailwind postcss configuration and remove broken [@apply](https://github.com/apply) rules ([cab4798](https://github.com/skquievreux/svg-grafik-generator/commit/cab4798fbfcf3a60952eb382bae448388e326f4f))
+
+
+### Features
+
+* complete tailwind config overhaul for Cosmic Glass theme ([43e08e2](https://github.com/skquievreux/svg-grafik-generator/commit/43e08e2908221b77735f74d3406beb46381e2da8))
+* massive icon system upgrade with 80+ new svgs and comprehensive mapping ([acf9625](https://github.com/skquievreux/svg-grafik-generator/commit/acf9625128f5b6d9d9fe1c7f8c69ae1bc8c70fae))
+* smart palette system with harmony engine and interactive viewer ([1ce8cf1](https://github.com/skquievreux/svg-grafik-generator/commit/1ce8cf14bbd51c70a213d38544c8f2c197570385))
+
+# [1.4.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.4...v1.4.0) (2025-12-11)
+
+
+### Features
+
+* implement 3-column grid layout and replace duplicate icons with unique paths (science, travel, finance) ([bdad4de](https://github.com/skquievreux/svg-grafik-generator/commit/bdad4dedaf60c5fc237e3071cd3a444e8b2b737f))
+
+## [1.3.4](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.3...v1.3.4) (2025-12-10)
+
+
+### Bug Fixes
+
+* add dynamic app icon generation to resolve favicon 404s ([9223131](https://github.com/skquievreux/svg-grafik-generator/commit/922313179181053583fc0db67b39f448ad7dd186))
+
+## [1.3.3](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.2...v1.3.3) (2025-12-10)
+
+
+### Bug Fixes
+
+* resolve syntax error in icon generator (missing brace) ([b2a9f2f](https://github.com/skquievreux/svg-grafik-generator/commit/b2a9f2feec54dbdd252140995b9681684531f7a7))
+
+## [1.3.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.1...v1.3.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* resolve icon duplication for shopping items ([1ae904b](https://github.com/skquievreux/svg-grafik-generator/commit/1ae904b4adb8597e3d3b028539567d95cf771f68))
+
+## [1.3.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.3.0...v1.3.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* resolve Button prop type errors (variant/size) ([2b43008](https://github.com/skquievreux/svg-grafik-generator/commit/2b43008619cd2753c9b68293bb56b1b5cca947e3))
+
+# [1.3.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.2...v1.3.0) (2025-12-10)
+
+
+### Features
+
+* modernize UI, animations, and gamification effects ([51be73a](https://github.com/skquievreux/svg-grafik-generator/commit/51be73a4cb6a28f9e8623ea13b5e73899f207430))
+
+## [1.2.2](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.1...v1.2.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* defaultColors undefined type error in icon route ([5d43df5](https://github.com/skquievreux/svg-grafik-generator/commit/5d43df57a8f9a2c1a40758136630ddebafa04346))
+
+## [1.2.1](https://github.com/skquievreux/svg-grafik-generator/compare/v1.2.0...v1.2.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* restore corrupted IconGallery component code ([44d2149](https://github.com/skquievreux/svg-grafik-generator/commit/44d214998e29e004407b899ce912d21f164568f5))
+
+# [1.2.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.1.0...v1.2.0) (2025-12-10)
+
+
+### Features
+
+* expand mock data to 20+ icons per category ([657e7ee](https://github.com/skquievreux/svg-grafik-generator/commit/657e7ee591a1288be806738bbe385d5ace82c310))
+* implement color customization ui and logic ([63c33d3](https://github.com/skquievreux/svg-grafik-generator/commit/63c33d3c3318bb1877ea1daeb9f83567fbfcfe34))
+
+# [1.1.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.6...v1.1.0) (2025-12-10)
+
+
+### Bug Fixes
+
+* correct icon scaling factor to make symbols visible ([3b9b4f5](https://github.com/skquievreux/svg-grafik-generator/commit/3b9b4f50b38e483746c1615daf23dd7aab88fafe))
+* malformed svg attributes in generator ([bcb6397](https://github.com/skquievreux/svg-grafik-generator/commit/bcb639720ae503185ce0a3d4232c019f6fb50cdd))
+
+
+### Features
+
+* enable color customization via api params ([9832c46](https://github.com/skquievreux/svg-grafik-generator/commit/9832c46a826ea13348ace5e177951cf9ab5cf9c4))
+
 ## [1.0.7](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.6...v1.0.7) (2025-12-10)
 
 
 ### Bug Fixes
 
 * correct icon scaling factor to make symbols visible ([3b9b4f5](https://github.com/skquievreux/svg-grafik-generator/commit/3b9b4f50b38e483746c1615daf23dd7aab88fafe))
+* malformed svg attributes in generator ([bcb6397](https://github.com/skquievreux/svg-grafik-generator/commit/bcb639720ae503185ce0a3d4232c019f6fb50cdd))
 
 ## [1.0.6](https://github.com/skquievreux/svg-grafik-generator/compare/v1.0.5...v1.0.6) (2025-12-10)
 

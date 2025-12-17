@@ -9,6 +9,9 @@ interface DynamicIconProps {
   size?: number;
   className?: string;
   showLoading?: boolean;
+  bgColor?: string;
+  borderColor?: string;
+  iconColor?: string;
 }
 
 export function DynamicIcon({
@@ -16,11 +19,33 @@ export function DynamicIcon({
   category,
   size = 40,
   className,
-  showLoading = true
+  showLoading = true,
+  bgColor,
+  borderColor,
+  iconColor
 }: DynamicIconProps) {
   const [svgContent, setSvgContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  // Detect theme changes
+  useEffect(() => {
+    const updateTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+
+    updateTheme();
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const loadIcon = async () => {
@@ -28,9 +53,35 @@ export function DynamicIcon({
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `/api/icons?name=${encodeURIComponent(name)}&category=${category}&size=${size}`
-        );
+        const params = new URLSearchParams({
+          name,
+          category,
+          size: size.toString(),
+        });
+
+        // Auto-adjust colors based on theme if not explicitly set
+        if (bgColor) {
+          params.append('bgColor', bgColor);
+        } else {
+          // Default: white in light mode, black in dark mode
+          params.append('bgColor', isDark ? '#000000' : '#FFFFFF');
+        }
+
+        if (borderColor) {
+          params.append('borderColor', borderColor);
+        } else {
+          // Default: light gray in light mode, dark gray in dark mode
+          params.append('borderColor', isDark ? '#1a1a1a' : '#e5e7eb');
+        }
+
+        if (iconColor) {
+          params.append('iconColor', iconColor);
+        } else {
+          // Default: dark in light mode, white in dark mode
+          params.append('iconColor', isDark ? '#FFFFFF' : '#000000');
+        }
+
+        const response = await fetch(`/api/icons?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
@@ -47,7 +98,7 @@ export function DynamicIcon({
     };
 
     loadIcon();
-  }, [name, category, size]);
+  }, [name, category, size, bgColor, borderColor, iconColor, isDark]);
 
   if (error) {
     return (

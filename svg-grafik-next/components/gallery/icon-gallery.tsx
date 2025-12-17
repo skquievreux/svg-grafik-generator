@@ -4,11 +4,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { DynamicIcon } from '@/components/icons/dynamic-icon';
 import { Button } from '@/components/ui/button';
 import { cn, formatCategoryName, copyToClipboard, downloadSVG } from '@/lib/utils';
-import { Search, Grid, List, Download, Copy, Heart } from 'lucide-react';
+import { Search, Grid, List, Download, Copy, Heart, Palette, RotateCcw, Sun, Moon, ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { IconViewerModal } from './icon-viewer-modal';
 
 interface Icon {
   name: string;
   category: string;
+  tags: string[];
 }
 
 interface GalleryData {
@@ -17,69 +20,129 @@ interface GalleryData {
   metadata: {
     total: number;
     categories: string[];
-    generated: string;
   };
 }
-
-const ITEMS_PER_PAGE = 24;
 
 export function IconGallery() {
   const [galleryData, setGalleryData] = useState<GalleryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(24);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  // Daten laden
+  // Initialize theme from localStorage
   useEffect(() => {
-    const loadGallery = async () => {
-      try {
-        const response = await fetch('/api/gallery');
-        const data = await response.json();
-        setGalleryData(data);
-      } catch (error) {
-        console.error('Failed to load gallery:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadGallery();
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      console.log('[Theme] Loaded from localStorage:', savedTheme);
+    }
   }, []);
 
-  // Gefilterte und sortierte Icons
+  // Theme Effect - Apply and persist
+  useEffect(() => {
+    console.log('[Theme] Applying theme:', theme);
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+
+    // Persist to localStorage
+    localStorage.setItem('theme', theme);
+    console.log('[Theme] Saved to localStorage:', theme);
+  }, [theme]);
+
+  // Custom Colors State
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [customColors, setCustomColors] = useState<{
+    bgColor: string;
+    borderColor: string;
+    iconColor: string;
+  }>({
+    bgColor: '',
+    borderColor: '',
+    iconColor: ''
+  });
+
+  // Viewer Modal State
+  const [viewerState, setViewerState] = useState<{
+    isOpen: boolean;
+    iconName: string | null;
+    category: string | null;
+  }>({
+    isOpen: false,
+    iconName: null,
+    category: null
+  });
+
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then(res => res.json())
+      .then(data => {
+        setGalleryData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load gallery:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      try {
+        setFavorites(new Set(JSON.parse(storedFavorites)));
+      } catch (e) {
+        console.error('Failed to parse favorites:', e);
+      }
+    }
+  }, []);
+
+  // Filter Logic
   const filteredIcons = useMemo(() => {
     if (!galleryData) return [];
 
-    let filtered = galleryData.icons;
+    let icons: Icon[] = galleryData.icons;
 
-    // Nach Suchbegriff filtern
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      icons = icons.filter(icon => icon.category === selectedCategory);
+    }
+
+    // Filter by search term (searches name, category, and tags)
     if (searchTerm) {
-      filtered = filtered.filter(icon =>
-        icon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        icon.category.toLowerCase().includes(searchTerm.toLowerCase())
+      const term = searchTerm.toLowerCase();
+      icons = icons.filter(icon =>
+        icon.name.toLowerCase().includes(term) ||
+        icon.category.toLowerCase().includes(term) ||
+        icon.tags.some(tag => tag.toLowerCase().includes(term))
       );
     }
 
-    // Nach Kategorie filtern
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(icon => icon.category === selectedCategory);
+    // Filter by selected tags (OR logic - icon must have at least one of the selected tags)
+    if (selectedTags.length > 0) {
+      icons = icons.filter(icon =>
+        selectedTags.some(selectedTag =>
+          icon.tags.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
+        )
+      );
     }
 
-    return filtered;
-  }, [galleryData, searchTerm, selectedCategory]);
+    return icons;
+  }, [galleryData, selectedCategory, searchTerm, selectedTags]);
 
-  // Paginierte Icons
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredIcons.length / itemsPerPage);
   const paginatedIcons = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredIcons.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredIcons, currentPage]);
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredIcons.slice(start, start + itemsPerPage);
+  }, [filteredIcons, currentPage, itemsPerPage]);
 
-  const totalPages = Math.ceil(filteredIcons.length / ITEMS_PER_PAGE);
-
-  // Favoriten verwalten
   const toggleFavorite = (iconName: string) => {
     const newFavorites = new Set(favorites);
     if (newFavorites.has(iconName)) {
@@ -88,28 +151,77 @@ export function IconGallery() {
       newFavorites.add(iconName);
     }
     setFavorites(newFavorites);
-    localStorage.setItem('iconFavorites', JSON.stringify(Array.from(newFavorites)));
+    localStorage.setItem('favorites', JSON.stringify(Array.from(newFavorites)));
   };
 
-  // Icon-Aktionen
-  const copyIconCode = async (icon: Icon) => {
+  const getIconSearchParams = (icon: Icon) => {
+    const params = new URLSearchParams({
+      name: icon.name,
+      category: icon.category
+    });
+
+    if (customColors.bgColor) params.append('bgColor', customColors.bgColor);
+    if (customColors.borderColor) params.append('borderColor', customColors.borderColor);
+
+    // Set icon color based on theme if not customized
+    if (customColors.iconColor) {
+      params.append('iconColor', customColors.iconColor);
+    } else {
+      // Auto-adjust icon color based on theme for better contrast
+      params.append('iconColor', theme === 'dark' ? '#FFFFFF' : '#000000');
+    }
+
+    return params;
+  };
+
+  const triggerConfetti = (x: number, y: number) => {
+    for (let i = 0; i < 20; i++) {
+      const piece = document.createElement('div');
+      piece.classList.add('confetti-piece');
+      piece.style.left = `${x}px`;
+      piece.style.top = `${y}px`;
+      piece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+      const spreadX = (Math.random() - 0.5) * 200;
+      const spreadY = (Math.random() - 1) * 200;
+      piece.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${spreadX}px, ${spreadY}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+      ], {
+        duration: 1000 + Math.random() * 500,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+      });
+
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 1500);
+    }
+  };
+
+  const copyIconCode = async (icon: Icon, e: React.MouseEvent) => {
     try {
-      const response = await fetch(
-        `/api/icons?name=${encodeURIComponent(icon.name)}&category=${icon.category}`
-      );
+      const params = getIconSearchParams(icon);
+      const response = await fetch(`/api/icons?${params.toString()}`);
       const svgCode = await response.text();
       await copyToClipboard(svgCode);
-      // Hier könnte eine Toast-Benachrichtigung hinzugefügt werden
+
+      const btn = e.currentTarget as HTMLButtonElement;
+      const originalInner = btn.innerHTML;
+      btn.innerHTML = '<span class="text-green-600 font-bold">✓</span>';
+      setTimeout(() => {
+        btn.innerHTML = originalInner;
+      }, 1000);
+
     } catch (error) {
       console.error('Failed to copy icon:', error);
     }
   };
 
-  const downloadIcon = async (icon: Icon) => {
+  const downloadIcon = async (icon: Icon, e: React.MouseEvent) => {
     try {
-      const response = await fetch(
-        `/api/icons?name=${encodeURIComponent(icon.name)}&category=${icon.category}`
-      );
+      triggerConfetti(e.clientX, e.clientY);
+      const params = getIconSearchParams(icon);
+      const response = await fetch(`/api/icons?${params.toString()}`);
       const svgCode = await response.text();
       const filename = `${icon.name.toLowerCase().replace(/\s+/g, '-')}.svg`;
       downloadSVG(svgCode, filename);
@@ -118,29 +230,54 @@ export function IconGallery() {
     }
   };
 
-  // Favoriten beim Laden wiederherstellen
+  const copyPaletteConfig = async () => {
+    const config = JSON.stringify(customColors, null, 2);
+    await copyToClipboard(config);
+  };
+
+  // Viewer Modal Handlers
+  const openViewer = (icon: Icon) => {
+    setViewerState({
+      isOpen: true,
+      iconName: icon.name,
+      category: icon.category
+    });
+  };
+
+  const closeViewer = () => {
+    setViewerState(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const handleApplyPalette = (colors: { background: string; border: string; icon: string }) => {
+    setCustomColors({
+      bgColor: colors.background,
+      borderColor: colors.border,
+      iconColor: colors.icon
+    });
+    // Save to session storage
+    sessionStorage.setItem('svg-icon-theme', JSON.stringify(colors));
+  };
+
+  // Load persisted theme
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('iconFavorites');
-    if (savedFavorites) {
+    const savedTheme = sessionStorage.getItem('svg-icon-theme');
+    if (savedTheme) {
       try {
-        setFavorites(new Set(JSON.parse(savedFavorites)));
-      } catch (error) {
-        console.error('Failed to load favorites:', error);
-      }
+        const colors = JSON.parse(savedTheme);
+        setCustomColors({
+          bgColor: colors.background,
+          borderColor: colors.border,
+          iconColor: colors.icon
+        });
+      } catch (e) { console.error(e) }
     }
   }, []);
 
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center">
-          <div className="relative mb-6">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-purple-200 border-t-purple-600 mx-auto animate-spin animation-delay-300"></div>
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Icons werden geladen</h3>
-          <p className="text-gray-600">Bitte warten Sie einen Moment...</p>
-        </div>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -154,258 +291,343 @@ export function IconGallery() {
   }
 
   return (
-    <div className="space-y-8 fade-in-up">
-      {/* Suchleiste und Filter */}
-      <div className="bg-white rounded-xl card-shadow border border-gray-200 p-8 mb-8 slide-in">
+    <div className="space-y-8 animate-pop-in">
+      {/* Control Panel */}
+      <div className="glass-card rounded-2xl p-6 md:p-8 mb-8 sticky top-24 z-40 transition-all duration-300">
         <div className="flex flex-col xl:flex-row gap-6 mb-6">
-          {/* Suche */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          <div className="flex-1 relative group">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-500 transition-colors" />
             <input
               type="text"
-              placeholder="Icons suchen..."
+              placeholder="Suchen Sie nach Icons (z.B. 'Herz', 'Reise')..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1); // Zurück zur ersten Seite bei Suche
+                setCurrentPage(1);
               }}
-              className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition-all duration-200 placeholder-gray-400"
+              className="w-full pl-12 pr-4 py-4 text-base md:text-lg bg-white/50 dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none placeholder-gray-400"
             />
           </div>
 
-          {/* Kategorie-Filter */}
+          {/* Selected Tags Display */}
+          {selectedTags.length > 0 && (
+            <div className="flex-1 flex flex-wrap items-center gap-2 p-3 bg-blue-50 dark:bg-space-light/10 rounded-xl border border-blue-200 dark:border-space-light/20">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Aktive Tags:</span>
+              {selectedTags.map((tag, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setSelectedTags(prev => prev.filter(t => t !== tag));
+                    setCurrentPage(1);
+                  }}
+                  className="group flex items-center gap-1 px-3 py-1 text-sm font-medium bg-blue-500 dark:bg-neon-purple text-white rounded-full hover:bg-blue-600 dark:hover:bg-neon-purple/80 transition-colors"
+                >
+                  {tag}
+                  <span className="text-xs opacity-70 group-hover:opacity-100">×</span>
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  setSelectedTags([]);
+                  setCurrentPage(1);
+                }}
+                className="ml-auto text-xs font-semibold text-red-600 dark:text-red-400 hover:underline"
+              >
+                Alle entfernen
+              </button>
+            </div>
+          )}
+
           <select
             value={selectedCategory}
             onChange={(e) => {
               setSelectedCategory(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-6 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition-all duration-200 min-w-[250px] cursor-pointer"
+            className="px-6 py-4 text-base md:text-lg bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-space-800 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none min-w-[200px] cursor-pointer appearance-none shadow-sm"
           >
-            <option value="all">Alle Kategorien ({galleryData.metadata.total})</option>
+            <option value="all" className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">Alle Kategorien ({galleryData.metadata.total})</option>
             {galleryData.metadata.categories.map(category => (
-              <option key={category} value={category}>
+              <option key={category} value={category} className="bg-white dark:bg-space-900 text-gray-900 dark:text-gray-100">
                 {formatCategoryName(category)} ({galleryData.categories[category]?.count || 0})
               </option>
             ))}
           </select>
 
-          {/* Ansichtsmodus */}
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <Button
-              variant={viewMode === 'grid' ? 'primary' : 'outline'}
+              variant={showColorPicker ? 'primary' : 'outline'}
               size="lg"
-              onClick={() => setViewMode('grid')}
-              className="px-6 py-4 text-lg font-medium"
+              onClick={() => setShowColorPicker(!showColorPicker)}
+              className={cn("px-6 py-4 text-base font-semibold transition-all", showColorPicker ? "shadow-lg shadow-blue-500/20" : "")}
+              title="Farben anpassen"
             >
-              <Grid className="h-5 w-5 mr-3" />
-              Raster
+              <Palette className="h-5 w-5 mr-0 md:mr-2" />
+              <span className="hidden md:inline">Anpassen</span>
             </Button>
+            <div className="bg-gray-100/50 dark:bg-space-light/20 p-1 rounded-xl flex border border-gray-200 dark:border-space-800">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className={cn("rounded-lg h-full px-4", viewMode === 'grid' && "shadow-sm bg-white dark:bg-space-800")}
+                title="Raster"
+              >
+                <Grid className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setViewMode('list')}
+                className={cn("rounded-lg h-full px-4", viewMode === 'list' && "shadow-sm bg-white dark:bg-space-800")}
+                title="Liste"
+              >
+                <List className="h-5 w-5" />
+              </Button>
+            </div>
             <Button
-              variant={viewMode === 'list' ? 'primary' : 'outline'}
-              size="lg"
-              onClick={() => setViewMode('list')}
-              className="px-6 py-4 text-lg font-medium"
+              variant="outline"
+              size="sm"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-12 h-12 rounded-xl dark:border-space-800 dark:bg-space-900 dark:text-yellow-400"
+              title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
             >
-              <List className="h-5 w-5 mr-3" />
-              Liste
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Statistiken */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-base text-gray-600 bg-gray-50 rounded-lg p-4">
-          <div className="flex items-center gap-4">
-            <span className="font-medium">
-              {filteredIcons.length} von {galleryData.metadata.total} Icons angezeigt
-            </span>
-            {selectedCategory !== 'all' && (
-              <span className="text-blue-600 bg-blue-100 px-3 py-1 rounded-full text-sm font-medium">
-                Filter: {formatCategoryName(selectedCategory)}
-              </span>
-            )}
+        {/* Color Picker Panel */}
+        {showColorPicker && (
+          <div className="mt-6 p-6 bg-white/60 dark:bg-space-900 rounded-xl border border-blue-100 dark:border-space-800 animate-pop-in">
+            <div className="flex flex-wrap gap-8 items-end">
+              {/* Background Color */}
+              <div>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Hintergrund</label>
+                <div className="flex items-center gap-3">
+                  <div className="relative group cursor-pointer overflow-hidden rounded-full shadow-sm hover:shadow-md transition-shadow">
+                    <input
+                      type="color"
+                      value={customColors.bgColor || '#000000'}
+                      onChange={(e) => setCustomColors({ ...customColors, bgColor: e.target.value })}
+                      className="h-10 w-10 p-0 border-0 absolute -top-1 -left-1 w-[120%] h-[120%] cursor-pointer"
+                    />
+                    <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.bgColor || '#000000' }}></div>
+                  </div>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.bgColor || 'Standard'}</span>
+                </div>
+              </div>
+
+              {/* Border Color */}
+              <div>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Rahmen</label>
+                <div className="flex items-center gap-3">
+                  <div className="relative group cursor-pointer overflow-hidden rounded-full shadow-sm hover:shadow-md transition-shadow">
+                    <input
+                      type="color"
+                      value={customColors.borderColor || '#000000'}
+                      onChange={(e) => setCustomColors({ ...customColors, borderColor: e.target.value })}
+                      className="h-10 w-10 p-0 border-0 absolute -top-1 -left-1 w-[120%] h-[120%] cursor-pointer"
+                    />
+                    <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.borderColor || '#000000' }}></div>
+                  </div>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.borderColor || 'Standard'}</span>
+                </div>
+              </div>
+
+              {/* Icon Color */}
+              <div>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2 tracking-wider">Icon</label>
+                <div className="flex items-center gap-3">
+                  <div className="relative group cursor-pointer overflow-hidden rounded-full shadow-sm hover:shadow-md transition-shadow">
+                    <input
+                      type="color"
+                      value={customColors.iconColor || '#000000'}
+                      onChange={(e) => setCustomColors({ ...customColors, iconColor: e.target.value })}
+                      className="h-10 w-10 p-0 border-0 absolute -top-1 -left-1 w-[120%] h-[120%] cursor-pointer"
+                    />
+                    <div className="w-10 h-10 border-2 border-white pointer-events-none rounded-full" style={{ backgroundColor: customColors.iconColor || '#000000' }}></div>
+                  </div>
+                  <span className="text-sm font-mono text-gray-600 bg-white dark:bg-space-800 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-space-700">{customColors.iconColor || 'Standard'}</span>
+                </div>
+              </div>
+
+              <div className="flex-1 flex justify-end">
+                <Button variant="outline" onClick={copyPaletteConfig} className="gap-2 dark:border-space-800 dark:bg-space-900 dark:text-gray-200">
+                  <Copy className="h-4 w-4" />
+                  Palette Kopieren
+                </Button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <Button
+                variant="ghost"
+                onClick={() => setCustomColors({ bgColor: '', borderColor: '', iconColor: '' })}
+                className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600 text-gray-500"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Zurücksetzen
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Stats Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-100 dark:border-space-800 gap-4">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+            <span className="font-semibold">{filteredIcons.length}</span> Icons gefunden
           </div>
           {favorites.size > 0 && (
-            <span className="text-red-600 font-medium bg-red-100 px-3 py-1 rounded-full">
-              ❤️ {favorites.size} Favoriten gespeichert
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-red-600 bg-red-50 px-3 py-1 rounded-full animate-bounce delay-1000">
+              <Heart className="h-3 w-3 fill-current" />
+              {favorites.size} Favoriten
             </span>
           )}
         </div>
       </div>
 
-      {/* Icon-Galerie */}
+      {/* Grid */}
       <div className={cn(
-        'gallery-grid',
+        'gallery-grid pb-20 justify-items-center',
         viewMode === 'grid'
-          ? 'grid gap-6'
+          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
           : 'flex flex-col gap-4'
       )}>
-        {paginatedIcons.map((icon) => (
-          <div
-            key={icon.name}
-            className={cn(
-              'group bg-white rounded-lg card-shadow border border-gray-200 transition-all duration-300 hover:card-shadow-hover hover:scale-105',
-              viewMode === 'grid' && 'p-6',
-              viewMode === 'list' && 'flex items-center gap-6 p-6'
-            )}
-          >
-            <div className={cn(
-              'flex items-center justify-center',
-              viewMode === 'grid' && 'mb-4 h-16',
-              viewMode === 'list' && 'mb-0 flex-shrink-0'
-            )}>
-              <div className="relative inline-block">
-                <DynamicIcon
-                  name={icon.name}
-                  category={icon.category}
-                  size={viewMode === 'grid' ? 64 : 48}
-                />
-                {favorites.has(icon.name) && (
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-                    <Heart className="h-3 w-3 text-white fill-current" />
-                  </div>
+        {paginatedIcons.map((icon, index) => {
+          const delayClass = `delay-${(index % 5) * 100}`;
+
+          return (
+            <div
+              key={icon.name}
+              className={cn(
+                'card-3d-wrapper animate-pop-in w-full max-w-[280px]',
+                viewMode === 'list' && 'max-w-none',
+                delayClass
+              )}
+            >
+              <div
+                className={cn(
+                  'card-3d group bg-white dark:bg-space-950 rounded-2xl border border-gray-200 dark:border-space-800 relative overflow-hidden transition-all duration-300 cursor-pointer shadow-sm dark:shadow-lg',
+                  viewMode === 'grid' && 'p-8 flex flex-col items-center hover:border-blue-300 dark:hover:border-neon-gold hover:shadow-md dark:hover:shadow-neon-gold/20',
+                  viewMode === 'list' && 'flex items-center gap-6 p-4 hover:border-blue-300 dark:hover:border-neon-gold'
                 )}
+                onClick={() => openViewer(icon)}
+              >
+                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(icon.name);
+                    }}
+                    className="p-2 hover:bg-red-50 rounded-full transition-colors"
+                  >
+                    <Heart className={cn("h-4 w-4", favorites.has(icon.name) ? "fill-red-500 text-red-500" : "text-gray-400")} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyIconCode(icon, e);
+                    }}
+                    className="p-2 hover:bg-blue-50 rounded-full transition-colors bg-white/80 dark:bg-space-900/80 shadow-sm"
+                    title="Code kopieren"
+                  >
+                    <Copy className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadIcon(icon, e);
+                    }}
+                    className="p-2 hover:bg-blue-50 rounded-full transition-colors bg-white/80 dark:bg-space-900/80 shadow-sm"
+                    title="Download SVG"
+                  >
+                    <Download className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                  </button>
+                </div>
+
+                <div className={cn(
+                  "relative transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3",
+                  viewMode === 'grid' ? "mb-6" : ""
+                )}>
+                  <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <DynamicIcon
+                    name={icon.name}
+                    category={icon.category}
+                    size={viewMode === 'grid' ? 64 : 48}
+                    bgColor={customColors.bgColor}
+                    borderColor={customColors.borderColor}
+                    iconColor={customColors.iconColor || (theme === 'dark' ? '#FFFFFF' : '#000000')}
+                  />
+                </div>
+
+                <div className={cn("text-center", viewMode === 'list' && "text-left")}>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">{icon.name}</h3>
+                  <span className="text-xs font-bold tracking-wider text-gray-400 dark:text-gray-500 uppercase block mb-2">{icon.category}</span>
+
+                  {/* Tag Chips */}
+                  <div className="flex flex-wrap gap-1 justify-center">
+                    {icon.tags.slice(0, 3).map((tag, idx) => (
+                      <button
+                        key={idx}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Add tag if not already selected
+                          if (!selectedTags.includes(tag)) {
+                            setSelectedTags(prev => [...prev, tag]);
+                            setCurrentPage(1);
+                          }
+                        }}
+                        className="px-2 py-0.5 text-[10px] font-medium bg-blue-50 dark:bg-space-light/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-space-light/30 transition-colors"
+                        title={`Suche nach "${tag}"`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className={cn(
-              'text-center',
-              viewMode === 'list' && 'flex-1'
-            )}>
-              <h3 className="font-semibold text-gray-900 mb-2 text-lg leading-tight">{icon.name}</h3>
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 mb-4">
-                {formatCategoryName(icon.category)}
-              </div>
-
-              {/* Aktionen */}
-              <div className="flex justify-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => copyIconCode(icon)}
-                  title="SVG-Code kopieren"
-                  className="btn-hover-lift hover:bg-blue-50 hover:border-blue-300 transition-all duration-200"
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => downloadIcon(icon)}
-                  title="SVG herunterladen"
-                  className="btn-hover-lift hover:bg-green-50 hover:border-green-300 transition-all duration-200"
-                >
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={favorites.has(icon.name) ? 'primary' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleFavorite(icon.name)}
-                  title="Als Favorit markieren"
-                  className={cn(
-                    'btn-hover-lift transition-all duration-200',
-                    favorites.has(icon.name)
-                      ? 'bg-red-500 hover:bg-red-600 text-white border-red-500 shadow-lg'
-                      : 'hover:bg-red-50 hover:border-red-300'
-                  )}
-                >
-                  <Heart className={cn(
-                    'h-4 w-4 transition-all',
-                    favorites.has(icon.name) && 'fill-current animate-pulse'
-                  )} />
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 mt-12">
+        <div className="flex justify-center items-center gap-4 py-8">
           <Button
             variant="outline"
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="px-6 py-3 text-base font-medium btn-hover-lift"
+            className="dark:bg-space-900 dark:border-space-800 dark:text-gray-100"
           >
-            ← Vorherige
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Zurück
           </Button>
-
-          <div className="flex gap-2">
-            {Array.from({ length: Math.min(7, totalPages) }, (_, i) => {
-              const pageNum = Math.max(1, Math.min(totalPages - 6, currentPage - 3)) + i;
-              if (pageNum > totalPages) return null;
-
-              return (
-                <Button
-                  key={pageNum}
-                  variant={pageNum === currentPage ? 'primary' : 'outline'}
-                  size="lg"
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={cn(
-                    'px-4 py-3 text-base font-medium min-w-[50px]',
-                    pageNum === currentPage && 'shadow-lg'
-                  )}
-                >
-                  {pageNum}
-                </Button>
-              );
-            })}
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
-            className="px-6 py-3 text-base font-medium btn-hover-lift"
-          >
-            Nächste →
-          </Button>
-        </div>
-      )}
-
-      {/* Seitenzähler */}
-      {totalPages > 1 && (
-        <div className="text-center mt-6">
-          <span className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
             Seite {currentPage} von {totalPages}
           </span>
+          <Button
+            variant="outline"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="dark:bg-space-900 dark:border-space-800 dark:text-gray-100"
+          >
+            Weiter
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
         </div>
       )}
 
-      {/* Leere Zustand */}
-      {filteredIcons.length === 0 && (
-        <div className="text-center py-16">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
-            <Search className="w-12 h-12 text-gray-400" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Keine Icons gefunden</h3>
-          <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            Es wurden keine Icons gefunden, die Ihren Suchkriterien entsprechen.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('all');
-                setCurrentPage(1);
-              }}
-              className="px-6 py-3"
-            >
-              Alle Filter zurücksetzen
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => setSearchTerm('')}
-              className="px-6 py-3"
-            >
-              Suche löschen
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Viewer Modal */}
+      <IconViewerModal
+        isOpen={viewerState.isOpen}
+        onClose={closeViewer}
+        iconName={viewerState.iconName}
+        category={viewerState.category}
+        onApplyPalette={handleApplyPalette}
+      />
     </div>
   );
 }

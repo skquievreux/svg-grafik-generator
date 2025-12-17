@@ -16,6 +16,9 @@ export const iconQuerySchema = z.object({
     .optional()
     .default('octagon'),
   size: z.coerce.number().min(24).max(512).default(40),
+  bgColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  borderColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  iconColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
 });
 
 export type IconQuery = z.infer<typeof iconQuerySchema>;
