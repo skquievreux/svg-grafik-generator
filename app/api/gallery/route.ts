@@ -1,6 +1,31 @@
 import { NextResponse } from 'next/server';
 import { galleryIcons } from './data';
 
+/**
+ * @swagger
+ * /api/gallery:
+ *   get:
+ *     summary: Liste aller Galerie-Icons
+ *     description: Gibt eine Liste aller verfügbaren Icons zurück, gruppiert nach Kategorien und mit Metadaten.
+ *     responses:
+ *       200:
+ *         description: Erfolgreiche Rückgabe der Galerie-Daten
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 icons:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 categories:
+ *                   type: object
+ *                 metadata:
+ *                   type: object
+ *       500:
+ *         description: Server-Fehler beim Abrufen der Daten
+ */
 export async function GET() {
   try {
     // Kategorien gruppieren
