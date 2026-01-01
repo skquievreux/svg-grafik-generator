@@ -2,6 +2,64 @@ import { NextRequest, NextResponse } from 'next/server';
 import { IconGenerator } from '@/lib/icons/generator';
 import { iconQuerySchema } from '@/lib/api/schemas';
 
+/**
+ * @swagger
+ * /api/icons:
+ *   get:
+ *     summary: Generiert ein dynamisches SVG-Icon
+ *     description: Erstellt ein personalisiertes SVG-Icon basierend auf Name, Kategorie und Styling-Parametern.
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Name des Icons oder Suchbegriff (z.B. "Kochmütze")
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Kategorie zur Bestimmung der Standardfarben
+ *       - in: query
+ *         name: shape
+ *         schema:
+ *           type: string
+ *           enum: [octagon, circle, square, hexagon]
+ *         description: Form des Icons
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: integer
+ *           default: 200
+ *         description: Größe des SVGs
+ *       - in: query
+ *         name: bgColor
+ *         schema:
+ *           type: string
+ *         description: Hex-Code für den Hintergrund
+ *       - in: query
+ *         name: borderColor
+ *         schema:
+ *           type: string
+ *         description: Hex-Code für den Rahmen
+ *       - in: query
+ *         name: iconColor
+ *         schema:
+ *           type: string
+ *         description: Hex-Code für das Symbol
+ *     responses:
+ *       200:
+ *         description: SVG-Grafik
+ *         content:
+ *           image/svg+xml:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Ungültige Parameter
+ *       500:
+ *         description: Fehler bei der Generierung
+ */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 

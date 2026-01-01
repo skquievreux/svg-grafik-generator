@@ -3,26 +3,68 @@ import { RiderAvatarGenerator } from '@/lib/riders/avatar-generator';
 import type { RiderAvatarConfig } from '@/lib/riders/avatar-generator';
 
 /**
- * GET /api/riders/avatar - Rider-Avatar generieren
- *
- * Query Parameters:
- * - name: string (required) - Rider-Name (z.B. "Sendit_76")
- * - level: number (optional, default: 1) - Rider-Level (1-100)
- * - helmet: string (optional) - Helm-Style
- * - shape: string (optional) - Hintergrund-Form
- * - scheme: string (optional, default: "primary") - Farbschema
- * - glasses: string (optional) - Brillen-Style
- * - beard: string (optional) - Bart-Style
- * - size: number (optional, default: 256) - Größe in Pixel
- * - showLevel: boolean (optional, default: true) - Level-Badge anzeigen
- * - animated: boolean (optional, default: false) - Animation aktivieren
- * - preset: number (optional, 0-4) - Starter-Preset verwenden
- * - random: boolean (optional) - Zufälligen Avatar generieren
- *
- * Beispiele:
- * /api/riders/avatar?name=Sendit_76&level=1&helmet=fullface_pro&scheme=primary
- * /api/riders/avatar?name=Sendit_76&preset=0
- * /api/riders/avatar?name=Sendit_76&random=true&level=25
+ * @swagger
+ * /api/riders/avatar:
+ *   get:
+ *     summary: Generiert ein Rider-Avatar SVG
+ *     description: Erstellt ein personalisiertes Rider-Avatar SVG basierend auf Name, Level und verschiedenen Stil-Optionen.
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Name des Riders (z.B. "Sendit_76")
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Rider-Level (1-100)
+ *       - in: query
+ *         name: helmet
+ *         schema:
+ *           type: string
+ *         description: Helm-Style (z.B. "fullface_pro")
+ *       - in: query
+ *         name: shape
+ *         schema:
+ *           type: string
+ *         description: Hintergrund-Form
+ *       - in: query
+ *         name: scheme
+ *         schema:
+ *           type: string
+ *           default: "primary"
+ *         description: Farbschema
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: integer
+ *           default: 256
+ *         description: Größe in Pixel
+ *       - in: query
+ *         name: preset
+ *         schema:
+ *           type: integer
+ *         description: Starter-Preset verwenden (0-4)
+ *       - in: query
+ *         name: random
+ *         schema:
+ *           type: boolean
+ *         description: Zufälligen Avatar generieren
+ *     responses:
+ *       200:
+ *         description: SVG-Grafik des Avatars
+ *         content:
+ *           image/svg+xml:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Ungültige Parameter
+ *       500:
+ *         description: Interner Fehler bei der Generierung
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
