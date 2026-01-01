@@ -1,7 +1,7 @@
 'use client';
 
 import { galleryIcons } from '@/app/api/gallery/data';
-import { SmartIcon, IconWithLabel } from '@/components/icons/smart-icon';
+import { SmartIcon } from '@/components/icons/smart-icon';
 import { useState, useMemo } from 'react';
 
 export default function IconsDemoPage() {
@@ -93,21 +93,19 @@ export default function IconsDemoPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
-                    viewMode === 'grid'
+                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${viewMode === 'grid'
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                    }`}
                 >
                   Grid
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
-                    viewMode === 'list'
+                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${viewMode === 'list'
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                    }`}
                 >
                   List
                 </button>

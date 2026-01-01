@@ -65,7 +65,18 @@ export const SmartIcon = memo<SmartIconProps>(({
   }
 
   // Render the matched Lucide icon
-  const LucideIcon = LucideIcons[mapping.lucideIcon] as React.ComponentType<LucideProps>;
+  const LucideIcon = (LucideIcons as any)[mapping.lucideIcon];
+
+  if (!LucideIcon) {
+    const FallbackIcon = LucideIcons.HelpCircle;
+    return (
+      <FallbackIcon
+        size={size}
+        className={className}
+        {...props}
+      />
+    );
+  }
 
   return (
     <LucideIcon
