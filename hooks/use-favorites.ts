@@ -14,15 +14,17 @@ export function useFavorites() {
 
   const toggleFavorite = useCallback(
     (id: string) => {
-      const newFavorites = new Set(favoritesArray);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      setFavoritesArray(Array.from(newFavorites));
+      setFavoritesArray((currentFavorites) => {
+        const newFavorites = new Set(currentFavorites);
+        if (newFavorites.has(id)) {
+          newFavorites.delete(id);
+        } else {
+          newFavorites.add(id);
+        }
+        return Array.from(newFavorites);
+      });
     },
-    [favoritesArray, setFavoritesArray]
+    [setFavoritesArray]
   );
 
   const isFavorite = useCallback(

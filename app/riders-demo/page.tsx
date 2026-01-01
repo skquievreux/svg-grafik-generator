@@ -14,20 +14,19 @@ export default function RidersDemoPage() {
   const randomConfig = RiderAvatarGenerator.getRandomConfig(level, riderName);
 
   const helmetOptions = [
-    'fullface_basic',
     'fullface_pro',
-    'halfshell_basic',
-    'bmx_classic',
-    'champion_gold',
+    'fullface_basic',
+    'halfshell_trail',
+    'dirt_bowl',
   ] as const;
+
   const shapeOptions = ['circle', 'octagon', 'hexagon', 'diamond'] as const;
   const schemeOptions = ['primary', 'team', 'premium'] as const;
+
   const glassesOptions = [
     'none',
-    'sporty_basic',
-    'goggles_mx',
-    'aviator_cool',
-    'visor_futuristic',
+    'goggles',
+    'sunglasses',
   ] as const;
 
   const [customConfig, setCustomConfig] = useState<RiderAvatarConfig>({
@@ -35,7 +34,7 @@ export default function RidersDemoPage() {
     level: 10,
     backgroundShape: 'circle',
     helmetStyle: 'fullface_pro',
-    glassesStyle: 'goggles_mx',
+    glassesStyle: 'goggles',
     colorScheme: 'primary',
     size: 256,
     showLevel: true,
@@ -62,10 +61,15 @@ export default function RidersDemoPage() {
             <span className="bg-orange-600 text-white px-3 py-1 rounded">1</span>
             Starter-Presets
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {presets.map((preset, index) => {
-              const svg = RiderAvatarGenerator.generateSVG({ ...preset, riderName, level });
-              const dataUrl = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+              const svg = RiderAvatarGenerator.generateSVG({
+                ...preset,
+                riderName,
+                level,
+                elementId: `preset-${index}`
+              });
+              const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
               return (
                 <div
@@ -135,8 +139,8 @@ export default function RidersDemoPage() {
 
             <div className="bg-gray-800 rounded-lg p-6 flex items-center justify-center">
               {(() => {
-                const svg = RiderAvatarGenerator.generateSVG(randomConfig);
-                const dataUrl = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+                const svg = RiderAvatarGenerator.generateSVG({ ...randomConfig, elementId: 'random-gen' });
+                const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
                 return (
                   <div className="w-64 h-64">
                     <img src={dataUrl} alt="Random Avatar" className="w-full h-full" />
@@ -144,13 +148,6 @@ export default function RidersDemoPage() {
                 );
               })()}
             </div>
-          </div>
-
-          <div className="mt-6 bg-gray-800 p-4 rounded-lg">
-            <p className="text-sm text-gray-400 mb-2">API-URL für zufälligen Avatar:</p>
-            <code className="text-xs bg-black p-2 rounded block overflow-x-auto">
-              {`/api/riders/avatar?name=${riderName}&level=${level}&random=true`}
-            </code>
           </div>
         </section>
 
@@ -267,7 +264,7 @@ export default function RidersDemoPage() {
                 <input
                   type="checkbox"
                   id="animated"
-                  checked={customConfig.animated}
+                  checked={customConfig.animated || false}
                   onChange={(e) => updateCustomConfig({ animated: e.target.checked })}
                   className="w-5 h-5 accent-orange-500"
                 />
@@ -279,8 +276,8 @@ export default function RidersDemoPage() {
 
             <div className="bg-gray-800 rounded-lg p-6 flex items-center justify-center">
               {(() => {
-                const svg = RiderAvatarGenerator.generateSVG(customConfig);
-                const dataUrl = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+                const svg = RiderAvatarGenerator.generateSVG({ ...customConfig, elementId: 'custom-builder' });
+                const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
                 return (
                   <div className="w-64 h-64">
                     <img src={dataUrl} alt="Custom Avatar" className="w-full h-full" />
@@ -289,71 +286,91 @@ export default function RidersDemoPage() {
               })()}
             </div>
           </div>
+        </section>
 
-          <div className="mt-6 bg-gray-800 p-4 rounded-lg">
-            <p className="text-sm text-gray-400 mb-2">API-URL für Custom Avatar:</p>
-            <code className="text-xs bg-black p-2 rounded block overflow-x-auto">
-              {`/api/riders/avatar?name=${customConfig.riderName}&level=${customConfig.level}&helmet=${customConfig.helmetStyle}&shape=${customConfig.backgroundShape}&scheme=${customConfig.colorScheme}&glasses=${customConfig.glassesStyle || 'none'}&showLevel=${customConfig.showLevel}&animated=${customConfig.animated}`}
-            </code>
+        {/* Scaling Test */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+            <span className="bg-orange-600 text-white px-3 py-1 rounded">4</span>
+            Quality & Scaling Test
+          </h2>
+          <div className="bg-gray-800 rounded-lg p-8">
+            <p className="text-gray-400 mb-6">Testet die Lesbarkeit und Detailschärfe des aktuellen Custom-Avatars in verschiedenen Auflösungen.</p>
+
+            <div className="flex flex-wrap items-end gap-8 justify-center lg:justify-start">
+              {[32, 48, 64, 128, 256].map((size) => {
+                const svg = RiderAvatarGenerator.generateSVG({ ...customConfig, size, elementId: `scale-${size}` });
+                const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+                return (
+                  <div key={size} className="flex flex-col items-center gap-2">
+                    <div style={{ width: size, height: size }} className="bg-gray-900 rounded-full ring-2 ring-gray-700">
+                      <img src={dataUrl} alt={`${size}px`} className="w-full h-full" />
+                    </div>
+                    <span className="text-xs text-gray-500 font-mono">{size}px</span>
+                  </div>
+                );
+              })}
+
+              {/* Extra Large 512px view separately if space permits or in a scroll container if needed, 
+                  but for this grid let's stick to fitting ones. I'll add 512 in a separate block or include it if layout permits.
+                  Let's include it in the flex wrap. */}
+              <div className="flex flex-col items-center gap-2">
+                {(() => {
+                  const size = 300; // 512 might be too huge for the row, let's use 300 as "Large" representation
+                  const svg = RiderAvatarGenerator.generateSVG({ ...customConfig, size, elementId: 'scale-300' });
+                  const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+                  return (
+                    <>
+                      <div style={{ width: size, height: size }} className="bg-gray-900 rounded-full ring-2 ring-gray-700">
+                        <img src={dataUrl} alt={`${size}px`} className="w-full h-full" />
+                      </div>
+                      <span className="text-xs text-gray-500 font-mono">{size}px (Preview)</span>
+                    </>
+                  )
+                })()}
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* API Documentation */}
-        <section>
+        {/* Progression Test */}
+        <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-            <span className="bg-orange-600 text-white px-3 py-1 rounded">4</span>
-            API-Dokumentation
+            <span className="bg-orange-600 text-white px-3 py-1 rounded">5</span>
+            Level Progression System
           </h2>
-          <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-            <div>
-              <h3 className="font-bold text-lg mb-2">GET /api/riders/avatar</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                Generiert einen Rider-Avatar basierend auf Parametern
-              </p>
-              <div className="bg-black p-4 rounded text-xs overflow-x-auto">
-                <pre>{`// Beispiele:
+          <div className="bg-gray-800 rounded-lg p-8">
+            <p className="text-gray-400 mb-6">Visualisierung der Qualitätsstufen basierend auf dem Level.</p>
 
-// Preset verwenden
-/api/riders/avatar?name=Sendit_76&level=1&preset=0
-
-// Zufälligen Avatar
-/api/riders/avatar?name=Sendit_76&level=25&random=true
-
-// Custom Avatar
-/api/riders/avatar?name=Sendit_76&level=10
-  &helmet=fullface_pro
-  &shape=hexagon
-  &scheme=primary
-  &glasses=goggles_mx
-  &size=512
-  &showLevel=true
-  &animated=false`}</pre>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-2">POST /api/riders/avatar</h3>
-              <p className="text-gray-400 text-sm mb-4">Batch-Generierung für mehrere Rider</p>
-              <div className="bg-black p-4 rounded text-xs overflow-x-auto">
-                <pre>{`{
-  "riders": [
-    {
-      "name": "Sendit_76",
-      "level": 1,
-      "helmetStyle": "fullface_basic",
-      "backgroundShape": "circle",
-      "colorScheme": "primary"
-    },
-    {
-      "name": "ProRider_99",
-      "level": 50,
-      "helmetStyle": "champion_gold",
-      "backgroundShape": "diamond",
-      "colorScheme": "premium"
-    }
-  ]
-}`}</pre>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { lvl: 1, label: 'ROOKIE (Lvl 1)', desc: 'Flat Design, Basic' },
+                { lvl: 4, label: 'AMATEUR (Lvl 4)', desc: '+Schatten, +Brille' },
+                { lvl: 8, label: 'PRO (Lvl 8)', desc: '+Reflexionen' },
+                { lvl: 15, label: 'ELITE (Lvl 15)', desc: '+Elite Glow' }
+              ].map((tier) => {
+                // Wir nutzen für alle denselben Basis-Avatar, um den Unterschied bei Details zu zeigen
+                const config = {
+                  ...customConfig,
+                  level: tier.lvl,
+                  elementId: `tier-${tier.lvl}`,
+                  // Stelle sicher, dass Brille an ist, um den "Amateur"-Unlock zu zeigen
+                  glassesStyle: customConfig.glassesStyle || 'goggles'
+                };
+                const svg = RiderAvatarGenerator.generateSVG(config as RiderAvatarConfig);
+                const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+                return (
+                  <div key={tier.lvl} className="flex flex-col items-center gap-3">
+                    <div className="w-32 h-32 bg-gray-900 rounded-lg p-2 ring-1 ring-gray-700">
+                      <img src={dataUrl} alt={tier.label} className="w-full h-full" />
+                    </div>
+                    <div className="text-center">
+                      <span className={`block font-bold ${tier.lvl >= 10 ? 'text-yellow-400' : 'text-white'}`}>{tier.label}</span>
+                      <span className="text-xs text-gray-500">{tier.desc}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
