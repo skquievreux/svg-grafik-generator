@@ -1,3 +1,23 @@
+# [1.10.0](https://github.com/skquievreux/svg-grafik-generator/compare/v1.9.0...v1.10.0) (2026-01-01)
+
+
+### Bug Fixes
+
+* downgrade scalar api reference for react 18 compatibility ([6dde09f](https://github.com/skquievreux/svg-grafik-generator/commit/6dde09faa65a0b0b727ecf6a13a55dcd946b5395))
+* generate openapi spec at build time to resolve serverless 500 error ([0a367d2](https://github.com/skquievreux/svg-grafik-generator/commit/0a367d2a4798ea8fd23054ae34e7d67470bf4a79))
+* remove deprecated beardStyle param ([b4645ea](https://github.com/skquievreux/svg-grafik-generator/commit/b4645ea3f8669138677c2b6533bcefa805bd9d40))
+* remove deprecated beardStyle param ([0431db9](https://github.com/skquievreux/svg-grafik-generator/commit/0431db946009837dce6230184949cc6e18013437))
+* resolve build errors and update lucide-react to latest ([56a9a44](https://github.com/skquievreux/svg-grafik-generator/commit/56a9a447a848077049bd8822ccfc2ba3acb9531d))
+* resolve merge conflict in package.json ([f371632](https://github.com/skquievreux/svg-grafik-generator/commit/f371632c69221d8367b78122e0805667bf3d3e9e))
+
+
+### Features
+
+* complete branch migration to root and restore api docs ([e064180](https://github.com/skquievreux/svg-grafik-generator/commit/e064180d79022b2c65865114a59ff1ca204f4e95))
+* complete branch migration to root and restore api docs ([ecbdb83](https://github.com/skquievreux/svg-grafik-generator/commit/ecbdb83078e737aa72fb930baab939885eba2c96))
+* upgrade rider graphics with new assets, progression system and hydration fixes ([a2c7d75](https://github.com/skquievreux/svg-grafik-generator/commit/a2c7d758176ef94fa33c1dd1f26df6c59a7e33b3))
+* upgrade rider graphics with new assets, progression system and hydration fixes ([567c0fd](https://github.com/skquievreux/svg-grafik-generator/commit/567c0fd26ecebb5503ac5983f41480f93a19131f))
+
 # Changelog
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
