@@ -1,0 +1,12 @@
+node_modules/
+.npmrc
+*.log
+git_status.txt
+git_pull_error.txt
+.venv/
+env/
+venv/
+.env
+.env.local
+.DS_Store
+Thumbs.db
