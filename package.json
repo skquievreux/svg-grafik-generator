@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "echo \"Building version $npm_package_version\" && next build",
+    "build": "tsx scripts/generate-openapi.ts && echo \"Building version $npm_package_version\" && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
