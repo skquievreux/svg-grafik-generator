@@ -1,3 +1,17 @@
+---
+title: "Konzept: UI-Optimierung, Kontrast & Features"
+type: "architecture"
+audience: "developer"
+status: "approved"
+priority: "high"
+version: "1.9.0"
+created: "2025-12-28"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["docs/01-architecture/ui-overhaul-concept.md"]
+tags: ["ui", "ux", "dark-mode", "contrast", "pagination"]
+---
+
 # Konzept: UI-Optimierung, Kontrast & Features
 
 ## 1. Problemstellung

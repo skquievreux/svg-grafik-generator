@@ -1,3 +1,17 @@
+---
+title: "Konzept: Social Sharing, Tagging & Sammlungen"
+type: "architecture"
+audience: "developer"
+status: "draft"
+priority: "medium"
+version: "1.9.0"
+created: "2025-12-23"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["docs/01-architecture/icon-generation-concept.md"]
+tags: ["social-sharing", "tagging", "collections", "deeplinking"]
+---
+
 # Konzept: Social Sharing, Tagging & Sammlungen (v2.0)
 
 Dieses Dokument beschreibt die Erweiterung der SVG-Grafik-Galerie um Social-Sharing-Funktionen, ein erweitertes Tagging-System und die Möglichkeit, individuelle Icon-Sammlungen zu erstellen und zu teilen.

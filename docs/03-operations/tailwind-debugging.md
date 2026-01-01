@@ -1,3 +1,17 @@
+---
+title: "Tailwind Dark Mode Debug Guide"
+type: "operations"
+audience: "developer"
+status: "approved"
+priority: "medium"
+version: "1.9.0"
+created: "2025-12-30"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["docs/03-operations/adr-001-tailwind-hydration.md"]
+tags: ["tailwind", "dark-mode", "debugging", "nextjs"]
+---
+
 # Tailwind Dark Mode Debug Guide
 
 ## Problem

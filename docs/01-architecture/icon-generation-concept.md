@@ -1,3 +1,17 @@
+---
+title: "Konzept: Skalierbare Icon-Generierung und Qualitätssicherung"
+type: "architecture"
+audience: "developer"
+status: "approved"
+priority: "high"
+version: "1.9.0"
+created: "2025-12-23"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["api-docs/route.ts", "lib/icons/generator.ts"]
+tags: ["svg", "icon-generation", "mapping"]
+---
+
 # Konzept: Skalierbare Icon-Generierung und Qualitätssicherung
 
 ## 1. Problemstellung

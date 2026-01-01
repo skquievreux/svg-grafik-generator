@@ -1,3 +1,17 @@
+---
+title: "Konzept: Smart Icon Viewer & Harmonischer Paletten-Generator"
+type: "architecture"
+audience: "developer"
+status: "approved"
+priority: "high"
+version: "1.9.0"
+created: "2025-12-23"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["lib/colors/harmony-engine.ts", "components/gallery/icon-viewer-modal.tsx"]
+tags: ["colors", "palette-generation", "design-system", "hsl"]
+---
+
 # Konzept: Smart Icon Viewer & Harmonischer Paletten-Generator
 
 ## 1. Zielsetzung

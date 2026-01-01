@@ -1,3 +1,17 @@
+---
+title: "ADR 001: Tailwind CSS v4 vs v3 Integration"
+type: "architecture"
+audience: "developer"
+status: "approved"
+priority: "high"
+version: "1.9.0"
+created: "2025-12-30"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["docs/03-operations/tailwind-debugging.md"]
+tags: ["tailwind", "nextjs", "turbopack", "adr"]
+---
+
 # 🔍 Tailwind CSS Problem-Analyse
 
 ## Aktueller Status
