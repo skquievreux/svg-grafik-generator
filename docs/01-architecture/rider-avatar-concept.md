@@ -1,3 +1,17 @@
+---
+title: "Rider-Avatar-Generator - Konzept für Bikepark Okarben"
+type: "architecture"
+audience: "developer"
+status: "approved"
+priority: "high"
+version: "1.9.0"
+created: "2025-01-16"
+updated: "2026-01-01"
+reviewers: ["@steff"]
+related: ["api-docs/route.ts", "lib/riders/avatar-generator.ts"]
+tags: ["rider-avatar", "svg-generation", "bikepark-okarben"]
+---
+
 # Rider-Avatar-Generator - Konzept für Bikepark Okarben
 
 **Version:** 1.0

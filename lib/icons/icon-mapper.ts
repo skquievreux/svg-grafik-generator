@@ -11,7 +11,7 @@ export interface IconMapping {
 export class IconMapper {
   // Primary Mappings: Direct name → Lucide icon assignments
   // Based on our cleaned icon data (307 icons across 13 categories)
-  private static PRIMARY_MAPPINGS: Record<string, keyof typeof LucideIcons> = {
+  private static PRIMARY_MAPPINGS: Record<string, any> = {
     // Food (20 icons)
     'Kochmütze': 'ChefHat',
     'Rezept': 'BookOpen',
@@ -21,7 +21,7 @@ export class IconMapper {
     'Karotte': 'Carrot',
     'Brot': 'Wheat',
     'Kaffee': 'Coffee',
-    'Tee': 'Cup',
+    'Tee': 'Coffee',
     'Eis': 'IceCream',
     'Kuchen': 'Cake',
     'Fischgericht': 'Fish',
@@ -313,7 +313,7 @@ export class IconMapper {
   };
 
   // Tag-based scoring rules for fallback matching
-  private static TAG_RULES: Record<string, (keyof typeof LucideIcons)[]> = {
+  private static TAG_RULES: Record<string, any[]> = {
     // Food-related tags
     'kochen': ['ChefHat', 'CookingPot', 'Utensils'],
     'essen': ['Utensils', 'UtensilsCrossed', 'Apple'],
@@ -396,11 +396,21 @@ export class IconMapper {
       };
     }
 
-    const [bestCandidate, score] = sortedCandidates[0];
+    const bestMatch = sortedCandidates[0];
+    if (!bestMatch) {
+      return {
+        iconName: icon.name,
+        lucideIcon: null,
+        confidence: 0,
+        source: 'fallback',
+      };
+    }
+
+    const [bestCandidate, score] = bestMatch;
 
     return {
       iconName: icon.name,
-      lucideIcon: bestCandidate as keyof typeof LucideIcons,
+      lucideIcon: bestCandidate as any,
       confidence: score / icon.tags.length,
       source: 'tag-based',
     };

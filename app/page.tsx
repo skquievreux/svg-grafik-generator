@@ -48,6 +48,14 @@ export default function HomePage() {
                   <span className="bg-blue-200 p-0.5 rounded-full">⬇️</span>
                   Free Download
                 </div>
+                <a href="/api-docs" className="flex items-center gap-2 text-xs font-semibold bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full border border-purple-100 shadow-sm hover:shadow-md transition-all hover:bg-purple-100">
+                  <span>📚</span>
+                  API Docs
+                </a>
+                <a href="/riders-demo" className="flex items-center gap-2 text-xs font-semibold bg-orange-50 text-orange-700 px-3 py-1.5 rounded-full border border-orange-100 shadow-sm hover:shadow-md transition-all hover:bg-orange-100">
+                  <span>🏍️</span>
+                  Rider Demo
+                </a>
               </div>
             </div>
           </div>
