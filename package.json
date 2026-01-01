@@ -19,7 +19,7 @@
     "icons:coverage": "tsx scripts/generate-icon-coverage.ts"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=20.9.0"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -53,7 +53,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.1.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.7.2",
+    "typescript": "^5.8.2",
     "vitest": "^4.0.15"
   }
 }
