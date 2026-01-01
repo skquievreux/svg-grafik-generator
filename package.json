@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
-    "@scalar/nextjs-api-reference": "^0.9.7",
+    "@scalar/nextjs-api-reference": "^0.4.0",
     "@supabase/supabase-js": "^2.49.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
