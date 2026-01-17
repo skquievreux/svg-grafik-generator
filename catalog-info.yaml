@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: svg-grafik-generator
+  description: |
+    Ein versatiles Tool zur automatisierten Generierung und Verwaltung von SVG-Grafiken mit Node.js und Python, unterstützt durch Supabase als Backend-Datenbank für nahtlose Skalierbarkeit und Integration in web-basierte Anwendungen.
+  annotations:
+    github.com/project-slug: skquievreux/svg-grafik-generator
+spec:
+  type: service
+  lifecycle: experimental
+  owner: guests
