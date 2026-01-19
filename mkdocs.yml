@@ -6,16 +6,29 @@ nav:
   - Home: index.md
   - Architecture:
     - Overview: 01-architecture/index.md
+    - Architecture Optimization: docs/01-architecture/architecture-optimization.md
+    - Icon Generation Concept: docs/01-architecture/icon-generation-concept.md
+    - Rider Avatar Concept: docs/01-architecture/rider-avatar-concept.md
+    - Smart Palette Concept: docs/01-architecture/smart-palette-concept.md
+    - Social Sharing Concept: docs/01-architecture/social-sharing-concept.md
+    - Ui Improvements Concept: docs/01-architecture/ui-improvements-concept.md
+    - Ui Overhaul Concept: docs/01-architecture/ui-overhaul-concept.md
     - Decisions: 01-architecture/decisions/
   - Implementation:
     - Overview: 02-implementation/index.md
+    - Documentation Guide: docs/02-implementation/documentation-guide.md
   - Operations:
     - Overview: 03-operations/index.md
+    - Adr 001 Tailwind Hydration: docs/03-operations/adr-001-tailwind-hydration.md
+    - Tailwind Debugging: docs/03-operations/tailwind-debugging.md
   - Business:
     - Overview: 04-business/index.md
+    - Portfolio Entry: docs/04-business/portfolio-entry.md
+    - Product Strategy: docs/04-business/product-strategy.md
     - History: 04-business/history/
   - Reference:
     - Overview: 05-reference/index.md
+    - Api Reference: docs/05-reference/api-reference.md
 
 plugins:
   - techdocs-core
